@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionary SYSTEM "file://localhost/System/Library/DTDs/sdef.dtd">
+<!-- @version(10.4) -->
+<dictionary title="µH Router Terminology">
+	<suite name="µH Router" code="OMmK" description="AppleScript for MacOS X Router for microHAM keyers (microKEYER, CW KEYER and DIGI KEYER).">
+		<class name="application" code="pAPP" description="cocoaModem scripts">
+			<cocoa class="NSApplication"/>
+			<element type="keyer" access="r">
+				<cocoa key="keyers"/>
+			</element>
+			<property name="quitIfNoKeyer" code="QINK" description="Ask Router to quit if there are no microHAM keyers found.  Returns true if it is quitting, returns false if it is not quitting." type="boolean">
+				<cocoa key="quitIfNoKeyer"/>
+			</property>
+			<property name="quitIfNotInUse" code="QNIU" description="Ask Router to quit if there are no apps connected.  Returns true if it is quitting, returns false if it is not quitting." type="boolean">
+				<cocoa key="quitIfNotInUse"/>
+			</property>
+			<property name="microKEYER" code="mKmK" description="microHAM microKEYER" type="keyer">
+				<cocoa key="microKEYER"/>
+			</property>
+			<property name="cwKEYER" code="cKcK" description="microHAM CW KEYER" type="keyer">
+				<cocoa key="cwKEYER"/>
+			</property>
+			<property name="digiKEYER" code="dKdK" description="microHAM DIGI KEYER" type="keyer">
+				<cocoa key="digiKEYER"/>
+			</property>
+			<property name="debug" code="Rdbg" description="Turn main router&apos;s debug log on/off." type="boolean">
+				<cocoa key="debug"/>
+			</property>
+			<property name="routerVersion" code="uRvr" description="Version string, e.g., 1.80" type="text" access="r">
+				<cocoa key="routerVersion"/>
+			</property>
+		</class>
+		<class name="keyer" code="Kyer" description="A microHAM keyer." inherits="application">
+			<cocoa class="Router"/>
+			<property name="connected" code="qrgG" description="Return whether the router is connected to a keyer." type="boolean" access="r">
+				<cocoa key="connected"/>
+			</property>
+			<property name="hasFSK" code="hFSK" description="Returns true if device has FSK." type="boolean" access="r">
+				<cocoa key="hasFSK"/>
+			</property>
+			<property name="hasWINKEY" code="kWnK" description="Returns true if device has WinKey." type="boolean" access="r"/>
+			<property name="PTT" code="Kptt" description="PTT state of Keyer." type="boolean">
+				<cocoa key="PTT"/>
+			</property>
+			<property name="FSK" code="sFSK" description="Sends the text through the FSK channel." type="text" access="w">
+				<cocoa key="FSK"/>
+			</property>
+			<property name="WINKEY" code="WinT" description="Sends the ASCII text string through the WinKey channel." type="text" access="w">
+				<cocoa key="WINKEY"/>
+			</property>
+			<property name="FLAGS" code="FLgs" description="Flags channel." type="text" access="r">
+				<cocoa key="FLAGS"/>
+			</property>
+			<property name="RTS" code="RTSb" description="RTS bit in FLAGS channel." type="boolean">
+				<cocoa key="RTS"/>
+			</property>
+			<property name="CONTROL" code="ctRL" description="CONTROL channel (hex string)" type="text">
+				<cocoa key="CONTROL"/>
+			</property>
+			<property name="RADIO" code="riGF" description="RADIO channel." type="text">
+				<cocoa key="RADIO"/>
+			</property>
+			<property name="WINKEYhex" code="WKHx" description="Send WinKey as a hex string." type="text" access="w">
+				<cocoa key="WINKEYhex"/>
+			</property>
+			<property name="debug" code="Kdbg" description="Turn debug log for each keyer on/off." type="boolean"/>
+			<property name="retain" code="rtnR" description="increment the retain count and return current value" type="integer">
+				<cocoa key="retainRouter"/>
+			</property>
+			<property name="release" code="rlsR" description="decement the retain count and return the current value" type="integer">
+				<cocoa key="releaseRouter"/>
+			</property>
+			<property name="WinKeyEmulate" code="WinX" description="Send hex string to WinKey emulator." type="text" access="w">
+				<cocoa key="WinKeyEmulate"/>
+			</property>
+			<property name="WinKeyEmulateHex" code="WKXx" description="Send hex string to WinKey emulator." type="text" access="w">
+				<cocoa key="WinKeyEmulateHex"/>
+			</property>
+			<property name="keyerID" code="uKID" description="Keyer ID, e.g. DKOUKJ9L" type="text"/>
+		</class>
+	</suite>
+</dictionary>

@@ -1,0 +1,78 @@
+0.20		First release (July 7, 2006)
+
+0.30		July 9, 2006
+			Fixed discoonect select set bug.
+
+0.40		
+
+
+0.50		Aug 11, 2006
+			setWinKEY was not sending zero byte to WinKey because C string was used
+
+0.60		Aug 12, 2007
+			Router receivedWinKey did not call Server receivedWinKey.
+			
+0.70		Nov 3, 2007
+			Added microKeyer II
+
+0.80		Feb 9, 2008
+			Stops server thread if an exception is seen.
+			Changed bundle identifier from w7ay.µH Router to w7ay.mH Router so it won't crash in Japanese MacOS X.
+			
+0.90		Feb 2008
+			Added FSK test.
+			Fixed missing FSK dispatch.
+
+1.00		Mar 2008
+			microKeyer II LCD support.
+			
+1.10		June 2008
+			Update both lines of microKeyer II LCD if utc is set.
+
+1.20		February 6 2009
+			Shut down ports that are not responding (LATENCYTIMEOUT)
+			Radio Packet Aggregate Timeout in Preference.
+			Diagnostic panel.
+			Added parserLock to keep entry from parser until it is completely done with a frame.
+			Change plist name to mHRouter.
+			Added common writeLock in Router.m for both Server.m and Keyer.m (was only in Keyer.m)
+			Aggregated writes, and added short sleep on writes to client.
+			Filter heartbeats and MK-II LCD responses.
+			Added locks to prevent sendControl overlaps.
+			
+1.30		February 2009
+			Add WRITEONLY keyer ports
+			Check FIFO activity against last written time instead of current time before invoking LATENCYTIMEOUT
+
+1.40		April 3, 2009
+			Panel for setting keyer mode.
+			Add UDP support
+			Added backdoor CONTROL sequences
+
+1.50		April 20, 2010
+			Fixed Winkey test.
+			Bypass UDP if cannot open.
+			Add CI-V and iLink setups.
+
+1.60		Internal release
+
+1.61		May 6, 2010
+			Added r1FollowTxMode.
+			Changed routing selection Menu.
+			Added backdoor for routing.
+
+1.70		July 5 2010
+			Support for DigiKeyer 2
+			added K3 tests in addition to FT-1000MP tests
+			Added backdoor for q-CW and p-FSK
+			
+1.80		Jan 20, 2011
+			Multiple keyer support.
+			
+1.90		Feb. 22, 2011
+			Bug fix for setup of multikeyer.
+			Pref version upped to 4.
+			Added iLink GUI and code to manipulate X2 bit 7 by Artem UB3ABM.
+			New icon supplied by Roberto EA2RY.
+			
+To do:  blocking commands so that keyer responses can be returned to the client who originated the command.

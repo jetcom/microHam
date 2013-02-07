@@ -1,0 +1,22 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            CLASS = KeyerTest; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                cwButton = id; 
+                getVFO = id; 
+                mainVFO = id; 
+                pttButton = id; 
+                radioModes = id; 
+                subVFO = id; 
+                view = id; 
+                winkeyButton = id; 
+                winkeyMessage = id; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }
+    ); 
+    IBVersion = 1; 
+}
