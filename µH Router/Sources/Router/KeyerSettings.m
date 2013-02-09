@@ -96,8 +96,8 @@ unsigned char abcdEncoding[] = { 'D', 'B', 'A', 'C' } ;
 				[ extendedSettingsButton setHidden:YES ] ;
 				[ self setInterface:lcdUTCMatrix to:@selector(utcSelectionChanged:) ] ;
 				
-				[ self setInterface:lcdLine1Matrix to:@selector(lcdSettingsChanged) ] ;
-				[ self setInterface:lcdLine2Matrix to:@selector(lcdSettingsChanged) ] ;
+				[ self setInterface:lcdLine1Setting to:@selector(lcdSettingsChanged) ] ;
+				[ self setInterface:lcdLine2Setting to:@selector(lcdSettingsChanged) ] ;
 				[ self setInterface:lcdContrast to:@selector(lcdSettingsChanged) ] ;
 				[ self setInterface:lcdBrightness to:@selector(lcdSettingsChanged) ] ;
 				
@@ -322,8 +322,8 @@ static int abcd( int c )
 	//  LCD parameters
 	X[13] = 13 - [ lcdContrast intValue ] ;
 	X[14] = [ lcdBrightness intValue ] ;
-	X[15] = [ lcdLine1Matrix selectedRow ]  ;
-	X[16] = [ lcdLine2Matrix selectedRow ]  ;
+	X[15] = [ lcdLine1Setting selectedTag ]  ;
+	X[16] = [ lcdLine2Setting selectedTag ]  ;
 	
 	//  event flags
 	n = m = 0 ;
@@ -570,7 +570,8 @@ static int abcd( int c )
 			[ router sendControl:line1 length:21 ] ;
 		}
 		//  Clear Host Strings if stored message is selected in X15/X16
-		if ( [ lcdLine1Matrix selectedRow ] != 1 ) {
+        // TEB
+		if ( [ lcdLine1Setting selectedTag ] != 1 ) {
 			unsigned char cancel[] = { 0x2d, 0, 0xad } ;
 			[ router sendControl:cancel length:3 ] ;
 		}
@@ -598,7 +599,7 @@ static int abcd( int c )
 			[ router sendControl:line2 length:21 ] ;
 		}
 		//  Clear Host Strings if stored message is selected in X15/X16
-		if ( [ lcdLine2Matrix selectedRow ] != 1 ) {
+		if ( [ lcdLine2Setting selectedTag ] != 1 ) {
 			unsigned char cancel[] = { 0x2d, 1, 0xad } ;
 			[ router sendControl:cancel length:3 ] ;
 		}
@@ -1130,14 +1131,14 @@ static int abcd( int c )
 			[ lcdBrightness setIntValue:n ] ;
 			break ;
 		case 15:
-			n = byte & 0x1f ;
+            n = byte & 0x1f;
 			if ( n < 0 ) n = 0 ; else if ( n > 0x12 ) n = 0x12 ;
-			[ lcdLine1Matrix selectCellAtRow:n column:0 ] ;
+            [ lcdLine1Setting selectItemWithTag:tag ] ;
 			break ;
-		case 16:
-			n = byte & 0x1f ;
+        case 16:
+            n = byte & 0x1f;
 			if ( n < 0 ) n = 0 ; else if ( n > 0x12 ) n = 0x12 ;
-			[ lcdLine2Matrix selectCellAtRow:n column:0 ] ;
+            [ lcdLine2Setting selectItemWithTag:tag ] ;
 			break ;
 		case 17:
 			line = string[21] & 0xff ;
@@ -1273,7 +1274,7 @@ static int hexFor( int v )
 //  at this point connection to the physical keyer is not made yet -- just update GUI for now and wait for -sendSettingsToKeyer to send GUI setting to the keyer
 - (void)setupKeyerFromPref:(NSDictionary*)prefs 
 {
-	int row, column, i, count, defaultIndex[32] ;
+	int tag, row, column, i, count, defaultIndex[32] ;
 	float contrast, brightness ;
 	NSNumber *number ;
 	NSString *string ;
@@ -1289,12 +1290,12 @@ static int hexFor( int v )
 		
 		//  set up LCD
 		number = [ prefs objectForKey:kMicroKeyerIILCDLine1 ] ;
-		row = ( number != nil ) ? [ number intValue ] : 1 ;
-		[ lcdLine1Matrix selectCellAtRow:row column:0 ] ;
-
+		tag = ( number != nil ) ? [ number intValue ] : 1 ;
+        [ lcdLine1Setting selectItemWithTag:tag ] ;
+        
 		number = [ prefs objectForKey:kMicroKeyerIILCDLine2 ] ;
-		row = ( number != nil ) ? [ number intValue ] : 1 ;
-		[ lcdLine2Matrix selectCellAtRow:row column:0 ] ;
+		tag = ( number != nil ) ? [ number intValue ] : 1 ;
+		[ lcdLine2Setting selectItemWithTag: tag ];
 
 		number = [ prefs objectForKey:kMicroKeyerIILCDClock ] ;
 		column = ( number != nil ) ? [ number intValue ] : 2 ;
@@ -1384,9 +1385,9 @@ static int hexFor( int v )
 	[ plist setObject:string forKey:kSetupHexString ] ;
 	
 	//  include LCD prefs
-	if ( isMK2 ) {	
-		line1 = [ lcdLine1Matrix selectedRow ] ;
-		line2 = [ lcdLine2Matrix selectedRow ] ;
+	if ( isMK2 ) {
+        line1 = [ lcdLine1Setting selectedTag ];
+        line2 = [ lcdLine2Setting selectedTag ];
 		utc = [ lcdUTCMatrix selectedColumn ] ;
 		contrast = [ lcdContrast floatValue ] ;
 		brightness = [ lcdBrightness floatValue ] ;
@@ -1440,8 +1441,8 @@ static int hexFor( int v )
 - (void)setFactoryLCDSetting
 {
 	if ( isMK2 ) {
-		[ lcdLine1Matrix selectCellAtRow:1 column:0 ] ;
-		[ lcdLine2Matrix selectCellAtRow:1 column:0 ] ;
+		[ lcdLine1Setting selectItemWithTag: 1 ];
+		[ lcdLine2Setting selectItemWithTag: 1 ];
 		[ lcdLine1Message setStringValue:@"micro KEYER II  " ] ;
 		[ lcdLine2Message setStringValue:@"   from microHAM" ] ;
 	}

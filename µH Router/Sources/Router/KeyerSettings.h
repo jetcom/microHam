@@ -64,10 +64,11 @@
 
 	IBOutlet id extendedSettingsButton ;		//  microKeyer II and digiKeyer II only
 
+ 
 	//  LCD settings (microKeyer II)
 	IBOutlet id lcdUTCMatrix ;
-	IBOutlet id lcdLine1Matrix ;
-	IBOutlet id lcdLine2Matrix ;
+    IBOutlet id lcdLine1Setting;
+    IBOutlet id lcdLine2Setting;
 	IBOutlet id lcdLine1Message ;
 	IBOutlet id lcdLine2Message ;
 	IBOutlet id lcdContrast ;
