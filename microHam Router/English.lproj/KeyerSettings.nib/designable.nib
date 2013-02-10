@@ -6567,7 +6567,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</bytes>
 													<reference key="NSNextKeyView" ref="214740664"/>
 												</object>
 											</object>
-											<string key="NSFrame">{{20, 93}, {270, 106}}</string>
+											<string key="NSFrame">{{20, 116}, {270, 106}}</string>
 											<reference key="NSSuperview" ref="290972758"/>
 											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="437352523"/>
@@ -13652,10 +13652,10 @@ AAAAAAAAAAAAAA</bytes>
 						<reference key="object" ref="304796293"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="821610188"/>
 							<reference ref="154059668"/>
-							<reference ref="614218119"/>
 							<reference ref="144688131"/>
+							<reference ref="614218119"/>
+							<reference ref="821610188"/>
 						</object>
 						<reference key="parent" ref="304477035"/>
 					</object>
