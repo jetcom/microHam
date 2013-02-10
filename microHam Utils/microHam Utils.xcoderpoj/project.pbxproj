@@ -10,29 +10,24 @@
 		844012A10A716FFC00EBD853 /* Downloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 844012A00A716FFC00EBD853 /* Downloader.m */; };
 		844012A80A71701F00EBD853 /* Controller.m in Sources */ = {isa = PBXBuildFile; fileRef = 844012A70A71701F00EBD853 /* Controller.m */; };
 		8446425E0A756C90000E14E9 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8446425D0A756C90000E14E9 /* IOKit.framework */; };
-		84B4405D0F3CE79F00E399D7 /* mpk_release_04_02.cbl in CopyFiles */ = {isa = PBXBuildFile; fileRef = 84B440490F3CE6A600E399D7 /* mpk_release_04_02.cbl */; };
-		84B4405E0F3CE79F00E399D7 /* mpk_release_04_01.cbl in CopyFiles */ = {isa = PBXBuildFile; fileRef = 84B4404E0F3CE6A600E399D7 /* mpk_release_04_01.cbl */; };
-		84B4405F0F3CE79F00E399D7 /* mpk_release_02_04.cbl in CopyFiles */ = {isa = PBXBuildFile; fileRef = 84B4404D0F3CE6A600E399D7 /* mpk_release_02_04.cbl */; };
-		84B440600F3CE79F00E399D7 /* mpk_release_01_01.cbl in CopyFiles */ = {isa = PBXBuildFile; fileRef = 84B4404C0F3CE6A600E399D7 /* mpk_release_01_01.cbl */; };
-		84B4406A0F3CE81000E399D7 /* mmk_release_05_04.cbl in CopyFiles */ = {isa = PBXBuildFile; fileRef = 84B4404B0F3CE6A600E399D7 /* mmk_release_05_04.cbl */; };
-		84B4406B0F3CE81000E399D7 /* mmk_release_03_00.cbl in CopyFiles */ = {isa = PBXBuildFile; fileRef = 84B4404A0F3CE6A600E399D7 /* mmk_release_03_00.cbl */; };
 		84D8917C0A71DB0B00AAC546 /* Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = 84D8917B0A71DB0B00AAC546 /* Utility.m */; };
 		84D8982C0A73E06E00AAC546 /* utils.icns in Resources */ = {isa = PBXBuildFile; fileRef = 84D8982B0A73E06E00AAC546 /* utils.icns */; };
 		8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		97823F0E16C8079A00360001 /* mmk_release_05_04.cbl in CopyFiles */ = {isa = PBXBuildFile; fileRef = 97823F0D16C8079A00360001 /* mmk_release_05_04.cbl */; };
+		97823F1016C807EB00360001 /* mpk_release_05_02.cbl in CopyFiles */ = {isa = PBXBuildFile; fileRef = 97823F0F16C807EB00360001 /* mpk_release_05_02.cbl */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		84B440540F3CE70200E399D7 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			dstPath = microKeyer;
 			dstSubfolderSpec = 7;
 			files = (
-				84B4406A0F3CE81000E399D7 /* mmk_release_05_04.cbl in CopyFiles */,
-				84B4406B0F3CE81000E399D7 /* mmk_release_03_00.cbl in CopyFiles */,
+				97823F0E16C8079A00360001 /* mmk_release_05_04.cbl in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -42,10 +37,7 @@
 			dstPath = "microKeyer II";
 			dstSubfolderSpec = 7;
 			files = (
-				84B4405D0F3CE79F00E399D7 /* mpk_release_04_02.cbl in CopyFiles */,
-				84B4405E0F3CE79F00E399D7 /* mpk_release_04_01.cbl in CopyFiles */,
-				84B4405F0F3CE79F00E399D7 /* mpk_release_02_04.cbl in CopyFiles */,
-				84B440600F3CE79F00E399D7 /* mpk_release_01_01.cbl in CopyFiles */,
+				97823F1016C807EB00360001 /* mpk_release_05_02.cbl in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,17 +57,13 @@
 		844012A60A71701F00EBD853 /* Controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Controller.h; sourceTree = "<group>"; };
 		844012A70A71701F00EBD853 /* Controller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Controller.m; sourceTree = "<group>"; };
 		8446425D0A756C90000E14E9 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
-		84B440490F3CE6A600E399D7 /* mpk_release_04_02.cbl */ = {isa = PBXFileReference; lastKnownFileType = file; path = mpk_release_04_02.cbl; sourceTree = "<group>"; };
-		84B4404A0F3CE6A600E399D7 /* mmk_release_03_00.cbl */ = {isa = PBXFileReference; lastKnownFileType = file; path = mmk_release_03_00.cbl; sourceTree = "<group>"; };
-		84B4404B0F3CE6A600E399D7 /* mmk_release_05_04.cbl */ = {isa = PBXFileReference; lastKnownFileType = file; path = mmk_release_05_04.cbl; sourceTree = "<group>"; };
-		84B4404C0F3CE6A600E399D7 /* mpk_release_01_01.cbl */ = {isa = PBXFileReference; lastKnownFileType = file; path = mpk_release_01_01.cbl; sourceTree = "<group>"; };
-		84B4404D0F3CE6A600E399D7 /* mpk_release_02_04.cbl */ = {isa = PBXFileReference; lastKnownFileType = file; path = mpk_release_02_04.cbl; sourceTree = "<group>"; };
-		84B4404E0F3CE6A600E399D7 /* mpk_release_04_01.cbl */ = {isa = PBXFileReference; lastKnownFileType = file; path = mpk_release_04_01.cbl; sourceTree = "<group>"; };
 		84D8917A0A71DB0B00AAC546 /* Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utility.h; sourceTree = "<group>"; };
 		84D8917B0A71DB0B00AAC546 /* Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utility.m; sourceTree = "<group>"; };
 		84D8982B0A73E06E00AAC546 /* utils.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = utils.icns; path = icon/utils.icns; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* µH Utils.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "µH Utils.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		97823F0D16C8079A00360001 /* mmk_release_05_04.cbl */ = {isa = PBXFileReference; lastKnownFileType = file; name = mmk_release_05_04.cbl; path = "../microHAM firmware/mmk_release_05_04.cbl"; sourceTree = "<group>"; };
+		97823F0F16C807EB00360001 /* mpk_release_05_02.cbl */ = {isa = PBXFileReference; lastKnownFileType = file; name = mpk_release_05_02.cbl; path = "../microHAM firmware/mpk_release_05_02.cbl"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,6 +131,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				97823F0F16C807EB00360001 /* mpk_release_05_02.cbl */,
+				97823F0D16C8079A00360001 /* mmk_release_05_04.cbl */,
 				84D8982B0A73E06E00AAC546 /* utils.icns */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
@@ -176,12 +166,6 @@
 		84A4A8CD0D8F89B500DFF230 /* microHAM firmware */ = {
 			isa = PBXGroup;
 			children = (
-				84B4404B0F3CE6A600E399D7 /* mmk_release_05_04.cbl */,
-				84B4404A0F3CE6A600E399D7 /* mmk_release_03_00.cbl */,
-				84B440490F3CE6A600E399D7 /* mpk_release_04_02.cbl */,
-				84B4404E0F3CE6A600E399D7 /* mpk_release_04_01.cbl */,
-				84B4404D0F3CE6A600E399D7 /* mpk_release_02_04.cbl */,
-				84B4404C0F3CE6A600E399D7 /* mpk_release_01_01.cbl */,
 			);
 			name = "microHAM firmware";
 			path = "../microHAM firmware";
