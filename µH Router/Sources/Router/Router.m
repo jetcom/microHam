@@ -907,7 +907,7 @@ static struct sockaddr_in *localSocket( in_port_t port )
 		break ;
 	case 2:
 		//  v1.61 routing selection
-	//TEB: Remove backdoor router selection	[ keyerSettings setRouting:controlBytes[2] ] ;
+		[ keyerSettings setRouting:controlBytes[2] ] ;
 		break ;
 	case 3:
 		//  v1.62 q-PSK and p-FSK

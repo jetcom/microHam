@@ -570,6 +570,7 @@ static int abcd( int c )
 			[ router sendControl:line1 length:21 ] ;
 		}
 		//  Clear Host Strings if stored message is selected in X15/X16
+        // TEB
 		if ( [ lcdLine1Setting selectedTag ] != 1 ) {
 			unsigned char cancel[] = { 0x2d, 0, 0xad } ;
 			[ router sendControl:cancel length:3 ] ;

@@ -74,8 +74,5 @@
 			Pref version upped to 4.
 			Added iLink GUI and code to manipulate X2 bit 7 by Artem UB3ABM.
 			New icon supplied by Roberto EA2RY.
-                
-1.91        Feb. 9, 2013
-            Added support for more display options on MKII
 			
 To do:  blocking commands so that keyer responses can be returned to the client who originated the command.
