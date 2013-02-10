@@ -26,12 +26,12 @@
 		84D4F1E60A23781E00E90AFA /* NamedFIFOPair.m in Sources */ = {isa = PBXBuildFile; fileRef = 84D4F1E50A23781E00E90AFA /* NamedFIFOPair.m */; };
 		84D4F31A0A2392E200E90AFA /* Server.m in Sources */ = {isa = PBXBuildFile; fileRef = 84D4F3190A2392E200E90AFA /* Server.m */; };
 		84D958A60A5A294A00278564 /* WinKeyEmulator.m in Sources */ = {isa = PBXBuildFile; fileRef = 84D958A50A5A294A00278564 /* WinKeyEmulator.m */; };
+		84D9591D0A5A348A00278564 /* µH Router.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 84D9591C0A5A348A00278564 /* µH Router.sdef */; };
 		84E89A7D0A320CAE0068824E /* ReplyBuf.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E89A7C0A320CAE0068824E /* ReplyBuf.m */; };
 		8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
-		97823F1216C80B5200360001 /* microHam Router.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 97823F1116C80B5200360001 /* microHam Router.sdef */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -75,13 +75,13 @@
 		84D4F3190A2392E200E90AFA /* Server.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Server.m; sourceTree = "<group>"; };
 		84D958A40A5A294A00278564 /* WinKeyEmulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WinKeyEmulator.h; sourceTree = "<group>"; };
 		84D958A50A5A294A00278564 /* WinKeyEmulator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WinKeyEmulator.m; sourceTree = "<group>"; };
+		84D9591C0A5A348A00278564 /* µH Router.sdef */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.sdef; path = "µH Router.sdef"; sourceTree = "<group>"; };
 		84E89A7B0A320CAE0068824E /* ReplyBuf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReplyBuf.h; sourceTree = "<group>"; };
 		84E89A7C0A320CAE0068824E /* ReplyBuf.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReplyBuf.m; sourceTree = "<group>"; };
 		84EEECBA0A1E4CB2003C3FE1 /* RouterCommands.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RouterCommands.h; sourceTree = "<group>"; };
 		84F2677E0F6AD03C009C0528 /* UDP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UDP.h; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* µH Router.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "µH Router.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		97823F1116C80B5200360001 /* microHam Router.sdef */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "microHam Router.sdef"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -150,7 +150,7 @@
 			isa = PBXGroup;
 			children = (
 				84B584D50A602E7D00D29602 /* Versions */,
-				97823F1116C80B5200360001 /* microHam Router.sdef */,
+				84D9591C0A5A348A00278564 /* µH Router.sdef */,
 				84C127960A0924CC004DF109 /* knob.icns */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
@@ -246,7 +246,7 @@
 			attributes = {
 				LastUpgradeCheck = 0460;
 			};
-			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "microHam Router" */;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "µH Router" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
@@ -276,10 +276,10 @@
 				8405DCA20A0AAD0000D307C2 /* Router.nib in Resources */,
 				845910910A276D6B000B3BB2 /* KeyerTest.nib in Resources */,
 				845910C20A2770E4000B3BB2 /* RouterTest.nib in Resources */,
+				84D9591D0A5A348A00278564 /* µH Router.sdef in Resources */,
 				84B584D60A602E7D00D29602 /* Versions in Resources */,
 				842CA3BA0F6C527A009502F8 /* KeyerMode.nib in Resources */,
 				842CAAF70F701C35009502F8 /* KeyerSettings.nib in Resources */,
-				97823F1216C80B5200360001 /* microHam Router.sdef in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -433,7 +433,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "microHam Router" */ = {
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "µH Router" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FCF4F08A954540054247B /* Debug */,
