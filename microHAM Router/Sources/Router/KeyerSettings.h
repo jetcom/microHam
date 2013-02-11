@@ -9,7 +9,7 @@
 #import <Cocoa/Cocoa.h>
 #import "Router.h"
 
-@interface KeyerSettings : NSObject {
+@interface KeyerSettings : NSObject <NSTableViewDataSource>{
 
 	IBOutlet id settingsView ;
 	IBOutlet id digiSettingsView ;
@@ -89,7 +89,8 @@
 	IBOutlet id d2CivAddress ;				// v 1.62
 	IBOutlet id d2CivFunction ;				// v 1.62
 		
-	IBOutlet id eventsMatrix ;
+    IBOutlet id line1Events;
+    IBOutlet id line2Events;
 	IBOutlet id eventDurationStepper ;
 	IBOutlet id eventDurationField ;
 	
@@ -112,6 +113,9 @@
 	Router *router ;
 	Boolean isMK2, isDK2 ;
 	NSWindow *settingsWindow ;
+    
+    NSMutableArray *events;
+
 	
 	unsigned char settingsString[56] ;		//  first 12 bytesare MK, and the rest are MK2 extensions
 }
