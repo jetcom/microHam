@@ -751,7 +751,7 @@ static void powerManagerCallback( void *refcon, io_service_t service, natural_t 
 	}
 	[ prefs setObject:activeSetups forKey:kDeviceSetups ] ;
 
-	[ prefs setObject:[ NSNumber numberWithInt:4 ] forKey:kPrefVersion ] ;
+	[ prefs setObject:[ NSNumber numberWithInt:5 ] forKey:kPrefVersion ] ;
 	
 	[ prefs removeObjectForKey:kMicroKeyerIILCDLine1 ] ;
 	[ prefs removeObjectForKey:kMicroKeyerIILCDLine2 ] ;
@@ -765,7 +765,10 @@ static void powerManagerCallback( void *refcon, io_service_t service, natural_t 
 	[ prefs removeObjectForKey:@"Enabled Devices" ] ;
 	
 	//  save plist
-	[ prefs writeToFile:plistPath atomically:YES ] ;
+    if ( ![ prefs writeToFile:plistPath atomically:YES ] )
+    {
+        Log( true, "Could not write pref files");
+    }
 	
 	for ( i = 0; i < routers; i++ ) [ router[i] shutdown ] ;
 	[ self shutdown ] ;

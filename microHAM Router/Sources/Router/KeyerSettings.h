@@ -114,8 +114,10 @@
 	Boolean isMK2, isDK2 ;
 	NSWindow *settingsWindow ;
     
-    NSMutableArray *events;
-
+    NSMutableArray *eventList;
+    NSMutableIndexSet *line1EventsSet;
+    NSMutableIndexSet *line2EventsSet;
+    
 	
 	unsigned char settingsString[56] ;		//  first 12 bytesare MK, and the rest are MK2 extensions
 }

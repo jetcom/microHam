@@ -23,10 +23,48 @@ static char factory[56] = {
 
 unsigned char abcdEncoding[] = { 'D', 'B', 'A', 'C' } ;
 
+
 - (void)setInterface:(NSControl*)object to:(SEL)selector
 {
 	[ object setAction:selector ] ;
 	[ object setTarget:self ] ;
+}
+
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        eventList = [[NSMutableArray alloc] init];
+        [ eventList addObject: @"Recoding Message" ];
+        [ eventList addObject: @"Playback Message" ];
+        [ eventList addObject: @"TX data During PTT" ];
+        [ eventList addObject: @"RX data During Receive" ];
+        [ eventList addObject: @"Bars During Recording" ];
+        [ eventList addObject: @"WPM Change when in CW" ];
+        [ eventList addObject: @"SteppIR Command" ];
+        [ eventList addObject: @"RX Frequency Change" ];
+        [ eventList addObject: @"TX Frequency Change" ];
+        [ eventList addObject: @"Mode Change" ];
+        [ eventList addObject: @"Mic Change" ];
+        [ eventList addObject: @"SteppIR Lock" ];
+        [ eventList addObject: @"Supply Voltage When Out of Range" ];
+        [ eventList addObject: @"Current WPM" ];
+        [ eventList addObject: @"Config Override" ];
+        [ eventList addObject: @"WPM/SN Change" ];
+        [ eventList addObject: @"Serial Number Change when in CW" ];
+        [ eventList addObject: @"Current Serial Number" ];
+        [ eventList addObject: @"WPN/Serial Number when in CW" ];
+        [ eventList addObject: @"Operating Frequency" ];
+        [ eventList addObject: @"VFO A Frequency" ];
+        [ eventList addObject: @"VFO B Frequency" ];
+        [ eventList addObject: @"SteppIR State" ];
+        [ eventList addObject: @"Station Master Lock" ];
+        [ eventList addObject: @"SubRX Frequency" ];
+        [ eventList addObject: @"Preset" ];
+        
+    
+    }
+    return self;
 }
 
 - (id)initIntoWindow:(NSWindow*)inSettingsWindow router:(Router*)inRouter 
@@ -35,7 +73,9 @@ unsigned char abcdEncoding[] = { 'D', 'B', 'A', 'C' } ;
 	
 	self = [ super init ] ;
 	if ( self ) {
-
+        line1EventsSet = [[NSMutableIndexSet alloc] init];
+        line2EventsSet = [[NSMutableIndexSet alloc] init];
+        
 		router = inRouter ;
 		isMK2 = isDK2 = NO ;			//  v1.62
 		utcTimer = nil ;
@@ -131,34 +171,7 @@ unsigned char abcdEncoding[] = { 'D', 'B', 'A', 'C' } ;
 				[ d2CivBaud setRefusesFirstResponder:YES ] ;
 				[ d2CivAddress setRefusesFirstResponder:YES ] ;
                 
-                events = [[NSMutableArray alloc] init];
-                [ events addObject: @"Recoding Message" ];
-                [ events addObject: @"Playback Message" ];
-                [ events addObject: @"TX data During PTT" ];
-                [ events addObject: @"RX data During Receive" ];
-                [ events addObject: @"Bars During Recording" ];
-                [ events addObject: @"WPM Change when in CW" ];
-                [ events addObject: @"SteppIR Command" ];
-                [ events addObject: @"RX Frequency Change" ];
-                [ events addObject: @"TX Frequency Change" ];
-                [ events addObject: @"Mode Change" ];
-                [ events addObject: @"Mic Change" ];
-                [ events addObject: @"SteppIR Lock" ];
-                [ events addObject: @"Supply Voltage When Out of Range" ];
-                [ events addObject: @"Current WPM" ];
-                [ events addObject: @"Config Override" ];
-                [ events addObject: @"WPM/SN Change" ];
-                [ events addObject: @"Serial Number Change when in CW" ];
-                [ events addObject: @"Current Serial Number" ];
-                [ events addObject: @"WPN/Serial Number when in CW" ];
-                [ events addObject: @"Operating Frequency" ];
-                [ events addObject: @"VFO A Frequency" ];
-                [ events addObject: @"VFO B Frequency" ];
-                [ events addObject: @"SteppIR State" ];
-                [ events addObject: @"Station Master Lock" ];
-                [ events addObject: @"SubRX Frequency" ];
-                [ events addObject: @"Preset" ];
-                    
+                
                 
 				
 				return self ;
@@ -352,6 +365,7 @@ static int abcd( int c )
 	X[16] = [ lcdLine2Setting selectedTag ]  ;
 	
 	//  event flags
+    /* TEB
 	n = m = 0 ;
 	bit = 1 ;
 	for ( i = 0; i < 8; i++ ) {
@@ -403,6 +417,7 @@ static int abcd( int c )
 	}
 	X[20] = n ;
 	X[24] = m ;
+     */
 	
 	n = [ eventDurationStepper intValue ] ;
 	if ( n < 0 ) n= 0 ; else if ( n > 255 ) n = 255 ;
@@ -596,7 +611,6 @@ static int abcd( int c )
 			[ router sendControl:line1 length:21 ] ;
 		}
 		//  Clear Host Strings if stored message is selected in X15/X16
-        // TEB
 		if ( [ lcdLine1Setting selectedTag ] != 1 ) {
 			unsigned char cancel[] = { 0x2d, 0, 0xad } ;
 			[ router sendControl:cancel length:3 ] ;
@@ -878,18 +892,6 @@ static int abcd( int c )
 	[ self setMatrix:matrix row:1 mask:( extra&0x80 ) ] ;
 }
 
-- (void)setEventMenuRow:(int)row mask:(int)mask line:(int)line
-{
-// TEB
-    /*
-	if ( mask == 0 ) {
-		[ eventsMatrix selectCellAtRow:0 column:0 ] ;
-		return ;
-	}
-	[ eventsMatrix selectCellAtRow:( line == 0 ) ? 1 : 2 column:0 ] ;
-     */
-}
-
 //  v1.62 change GUI to SETTINGS string for digiKeyer II
 - (void)changeDK2SettingsToMatchString:(char*)string length:(int)length
 {
@@ -1041,8 +1043,6 @@ static int abcd( int c )
 - (void)changeSettingsToMatchString:(char*)string length:(int)length
 {
 	int i, j, byte, n, mask, baud, tag ;
-    NSMutableIndexSet *line1Set = [[NSMutableIndexSet alloc] init];
-    NSMutableIndexSet *line2Set = [[NSMutableIndexSet alloc] init];
 	Boolean qsk ;
 	
 	if ( isDK2 ) {
@@ -1175,73 +1175,73 @@ static int abcd( int c )
 			for ( j = 0; j < 8; j++ ) {
                 if ( 1<<j & byte  )
                 {
-                    [ line1Set addIndex: j ];
+                    [ line1EventsSet addIndex: j ];
                 }
 			}
-            [line1Events selectRowIndexes:line1Set byExtendingSelection:YES];
+            //[line1Events selectRowIndexes:line1EventsSet byExtendingSelection:YES];
             break ;
 		case 18:
 			for ( j = 0; j < 8; j++ ) {
                 if ( 1<<j & byte  )
                 {
-                    [ line1Set addIndex: j+8 ];
+                    [ line1EventsSet addIndex: j+8 ];
                 }
 			}
-            [line1Events selectRowIndexes:line1Set byExtendingSelection:YES];
+            //[line1Events selectRowIndexes:line1EventsSet byExtendingSelection:YES];
             break ;
 		case 19:
 			for ( j = 0; j < 8; j++ ) {
                 if ( 1<<j & byte  )
                 {
-                    [ line1Set addIndex: j+16 ];
+                    [ line1EventsSet addIndex: j+16 ];
                 }
 			}
-            [line1Events selectRowIndexes:line1Set byExtendingSelection:YES];
+            //[line1Events selectRowIndexes:line1EventsSet byExtendingSelection:YES];
             break ;
 		case 20:
 			for ( j = 0; j < 8; j++ ) {
                 if ( 1<<j & byte  )
                 {
-                    [ line1Set addIndex: j+24 ];
+                    [ line1EventsSet addIndex: j+24 ];
                 }
 			}
-            [line1Events selectRowIndexes:line1Set byExtendingSelection:YES];
+            //[line1Events selectRowIndexes:line1EventsSet byExtendingSelection:YES];
             break ;
 		case 21:
 			for ( j = 0; j < 8; j++ ) {
                 if ( 1<<j & byte  )
                 {
-                    [ line2Set addIndex: j ];
+                    [ line2EventsSet addIndex: j ];
                 }
 			}
-            [line2Events selectRowIndexes:line2Set byExtendingSelection:YES];
+            //[line2Events selectRowIndexes:line2EventsSet byExtendingSelection:YES];
             break ;
         case 22:
 			for ( j = 0; j < 8; j++ ) {
                 if ( 1<<j & byte  )
                 {
-                    [ line2Set addIndex: j+8 ];
+                    [ line2EventsSet addIndex: j+8 ];
                 }
 			}
-            [line2Events selectRowIndexes:line2Set byExtendingSelection:YES];
+            //[line2Events selectRowIndexes:line2EventsSet byExtendingSelection:YES];
             break ;
         case 23:
 			for ( j = 0; j < 8; j++ ) {
                 if ( 1<<j & byte  )
                 {
-                    [ line2Set addIndex: j+16 ];
+                    [ line2EventsSet addIndex: j+16 ];
                 }
 			}
-            [line2Events selectRowIndexes:line2Set byExtendingSelection:YES];
+            //[line2Events selectRowIndexes:line2EventsSet byExtendingSelection:YES];
             break ;
         case 24:
 			for ( j = 0; j < 8; j++ ) {
                 if ( 1<<j & byte  )
                 {
-                    [ line2Set addIndex: j+24 ];
+                    [ line2EventsSet addIndex: j+24 ];
                 }
 			}
-            [line2Events selectRowIndexes:line2Set byExtendingSelection:YES];
+            //[line2Events selectRowIndexes:line2EventsSet byExtendingSelection:YES];
             break ;
 		case 25:
 			[ eventDurationStepper setIntValue:byte ] ;
@@ -1339,12 +1339,11 @@ static int hexFor( int v )
 //  at this point connection to the physical keyer is not made yet -- just update GUI for now and wait for -sendSettingsToKeyer to send GUI setting to the keyer
 - (void)setupKeyerFromPref:(NSDictionary*)prefs 
 {
-	int tag, column, i, count, defaultIndex[32] ;
+	int tag, column, i, count;
 	float contrast, brightness ;
 	NSNumber *number ;
 	NSString *string ;
-	NSArray *events ;
-	NSPopUpButton *event ;
+	NSArray *prefEvents ;
 	
 	if ( isMK2 ) {	
 		//  set GUI up from SETTINGS in Plist
@@ -1383,6 +1382,36 @@ static int hexFor( int v )
 		[ lcdLine2Message setStringValue:string ] ;
 		
 		//  event menus
+        [line1EventsSet removeAllIndexes];
+        [line2EventsSet removeAllIndexes];
+        count = [ eventList count ] ;
+        prefEvents = [ prefs objectForKey:kMicroKeyerIILine1Events ];
+        if ( prefEvents == nil )
+        {
+            // Read in the old preferences
+            prefEvents = [ prefs objectForKey:kMicroKeyerIIEvents ] ;
+            if ( prefEvents != nil ) {
+                count = [ prefEvents count ];
+                for ( i = 0; i < count; i++ ) {
+                    string = [ prefEvents objectAtIndex:i ] ;
+                    if ( [ string isEqualToString:@"Line 1" ])
+                    {
+                        [ line1EventsSet addIndex: i ];
+                    }
+                    else if ( [string isEqualToString:@"Line 2"] )
+                    {
+                        [ line2EventsSet addIndex: i ];
+                    }
+                }
+            }
+        }
+        else
+        {
+            // TEB: Read new format here
+            // Start here..
+        }
+        [line1Events selectRowIndexes:line1EventsSet byExtendingSelection:YES];
+        [line2Events selectRowIndexes:line2EventsSet byExtendingSelection:YES];
         /* TEB
          count = [ eventsMatrix numberOfRows ] ;
 		for ( i = 0; i < count; i++ ) {
@@ -1433,10 +1462,10 @@ static int hexFor( int v )
 - (NSMutableDictionary*)settingsPlist
 {
 	NSMutableDictionary *plist = [ NSMutableDictionary dictionaryWithCapacity:0 ] ;
-	NSMutableArray *events ;
-	NSPopUpButton *event ;
+    NSData *setData;
+    NSMutableArray *events;
 	NSString *string, *msg1, *msg2 ;
-	int i, n, line1, line2, utc, count ;
+	int i, n, line1, line2, utc, count;
 	float contrast, brightness ;
 	char hexString[113] ;
 	
@@ -1468,7 +1497,32 @@ static int hexFor( int v )
 		[ plist setObject:[ NSNumber numberWithFloat:brightness ] forKey:kMicroKeyerIILCDBrightness ] ;
 		[ plist setObject:msg1 forKey:kMicroKeyerIILCDMessage1 ] ;
 		[ plist setObject:msg2 forKey:kMicroKeyerIILCDMessage2 ] ;
-		
+        
+        /* TEB: Works, but isn't human readable */
+        setData = [NSKeyedArchiver archivedDataWithRootObject: line1Events];
+        [ plist setObject: setData forKey:kMicroKeyerIILine1Events ];
+        
+        count = [ line1Events numberOfRows ];
+        if ( count > 0)
+        {
+			events = [ NSMutableArray arrayWithCapacity:count ] ;
+            [[line1Events selectedRowIndexes] enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+                [events addObject: [NSNumber numberWithInt:idx]];
+            }];
+            [ plist setObject:events forKey: kMicroKeyerIILine1Events];
+        }
+        
+        count = [ line2Events numberOfRows ];
+        if ( count > 0)
+        {
+			events = [ NSMutableArray arrayWithCapacity:count ] ;
+            [[line2Events selectedRowIndexes] enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+                [events addObject: [NSNumber numberWithInt:idx]];
+            }];
+            [ plist setObject:events forKey: kMicroKeyerIILine2Events];
+        }
+        
+        
         /* TEB
 		count = [ eventsMatrix numberOfRows ] ;
 		if ( count > 0 ) {
@@ -1676,12 +1730,12 @@ static int hexFor( int v )
 
 -(NSInteger) numberOfRowsInTableView:(NSTableView *)tableView
 {
-    return [events count];
+    return [eventList count];
 }
 
 - (id) tableView:(NSTableView *)updateTable objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
-    NSString *s = [ events objectAtIndex: row ];
+      return [ eventList objectAtIndex: row ];
 }
 
 @end
