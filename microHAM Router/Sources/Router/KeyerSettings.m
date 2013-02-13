@@ -30,51 +30,12 @@ unsigned char abcdEncoding[] = { 'D', 'B', 'A', 'C' } ;
 	[ object setTarget:self ] ;
 }
 
-- (id)init
-{
-    self = [super init];
-    if (self) {
-        eventList = [[NSMutableArray alloc] init];
-        [ eventList addObject: @"Recoding Message" ];
-        [ eventList addObject: @"Playback Message" ];
-        [ eventList addObject: @"TX data During PTT" ];
-        [ eventList addObject: @"RX data During Receive" ];
-        [ eventList addObject: @"Bars During Recording" ];
-        [ eventList addObject: @"WPM Change when in CW" ];
-        [ eventList addObject: @"SteppIR Command" ];
-        [ eventList addObject: @"RX Frequency Change" ];
-        [ eventList addObject: @"TX Frequency Change" ];
-        [ eventList addObject: @"Mode Change" ];
-        [ eventList addObject: @"Mic Change" ];
-        [ eventList addObject: @"SteppIR Lock" ];
-        [ eventList addObject: @"Supply Voltage When Out of Range" ];
-        [ eventList addObject: @"Current WPM" ];
-        [ eventList addObject: @"Config Override" ];
-        [ eventList addObject: @"WPM/SN Change" ];
-        [ eventList addObject: @"Serial Number Change when in CW" ];
-        [ eventList addObject: @"Current Serial Number" ];
-        [ eventList addObject: @"WPN/Serial Number when in CW" ];
-        [ eventList addObject: @"Operating Frequency" ];
-        [ eventList addObject: @"VFO A Frequency" ];
-        [ eventList addObject: @"VFO B Frequency" ];
-        [ eventList addObject: @"SteppIR State" ];
-        [ eventList addObject: @"Station Master Lock" ];
-        [ eventList addObject: @"SubRX Frequency" ];
-        [ eventList addObject: @"Preset" ];
-        
-    
-    }
-    return self;
-}
-
 - (id)initIntoWindow:(NSWindow*)inSettingsWindow router:(Router*)inRouter 
 {
 	int i ;
 	
 	self = [ super init ] ;
 	if ( self ) {
-        line1EventsSet = [[NSMutableIndexSet alloc] init];
-        line2EventsSet = [[NSMutableIndexSet alloc] init];
         
 		router = inRouter ;
 		isMK2 = isDK2 = NO ;			//  v1.62
@@ -172,7 +133,37 @@ unsigned char abcdEncoding[] = { 'D', 'B', 'A', 'C' } ;
 				[ d2CivAddress setRefusesFirstResponder:YES ] ;
                 
                 
+                eventList = [[NSMutableArray alloc] init];
+                [ eventList addObject: @"Recoding Message" ];
+                [ eventList addObject: @"Playback Message" ];
+                [ eventList addObject: @"TX data During PTT" ];
+                [ eventList addObject: @"RX data During Receive" ];
+                [ eventList addObject: @"Bars During Recording" ];
+                [ eventList addObject: @"WPM Change when in CW" ];
+                [ eventList addObject: @"SteppIR Command" ];
+                [ eventList addObject: @"RX Frequency Change" ];
+                [ eventList addObject: @"TX Frequency Change" ];
+                [ eventList addObject: @"Mode Change" ];
+                [ eventList addObject: @"Mic Change" ];
+                [ eventList addObject: @"SteppIR Lock" ];
+                [ eventList addObject: @"Supply Voltage When Out of Range" ];
+                [ eventList addObject: @"Current WPM" ];
+                [ eventList addObject: @"Config Override" ];
+                [ eventList addObject: @"WPM/SN Change" ];
+                [ eventList addObject: @"Serial Number Change when in CW" ];
+                [ eventList addObject: @"Current Serial Number" ];
+                [ eventList addObject: @"WPN/Serial Number when in CW" ];
+                [ eventList addObject: @"Operating Frequency" ];
+                [ eventList addObject: @"VFO A Frequency" ];
+                [ eventList addObject: @"VFO B Frequency" ];
+                [ eventList addObject: @"SteppIR State" ];
+                [ eventList addObject: @"Station Master Lock" ];
+                [ eventList addObject: @"SubRX Frequency" ];
+                [ eventList addObject: @"Preset" ];
                 
+                line1EventsSet = [[NSMutableIndexSet alloc] init];
+                line2EventsSet = [[NSMutableIndexSet alloc] init];
+                    
 				
 				return self ;
 			}
@@ -345,7 +336,8 @@ static int abcd( int c )
 - (void)makeExtensionSettingsString
 {
 	unsigned char *X ;
-	int i, n, m, bit, event, baud ;
+	int n, baud ;
+    __block int b;
 	NSMenuItem *item ;
 
 	X = &settingsString[0] ;
@@ -365,59 +357,72 @@ static int abcd( int c )
 	X[16] = [ lcdLine2Setting selectedTag ]  ;
 	
 	//  event flags
-    /* TEB
-	n = m = 0 ;
-	bit = 1 ;
-	for ( i = 0; i < 8; i++ ) {
-		event = [ self eventAtRow:i ] ;
-		if ( event != 0 ) {
-			n |= bit ;
-			if ( event > 1 ) m |= bit ;
-		}
-		bit *= 2 ;
-	}
-	X[17] = n ;
-	X[21] = m ;
+ /*enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+                [events addObject: [NSNumber numberWithInt:idx]];
+            }];*/
+    b = 0;
+    [ line1EventsSet enumerateIndexesInRange: NSMakeRange(0,7) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
+        {
+           b |= 1 << idx;
+        }
+    ];
+    X[17] = b;
+    
+    b = 0;
+    [ line1EventsSet enumerateIndexesInRange: NSMakeRange(8,15) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
+        {
+           b |= 1 << idx-8;
+        }
+    ];
+    X[18] = b;
+    
+    b = 0;
+    [ line1EventsSet enumerateIndexesInRange: NSMakeRange(16,23) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
+        {
+           b |= 1 << idx-16;
+        }
+    ];
+    X[19] = b;
+    
+    b = 0;
+    [ line1EventsSet enumerateIndexesInRange: NSMakeRange(24,31) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
+        {
+           b |= 1 << idx-24;
+        }
+    ];
+    X[20] = b;
 	
-	n = m = 0 ;
-	bit = 1 ;
-	for ( i = 0; i < 8; i++ ) {
-		event = [ self eventAtRow:i+8 ] ;
-		if ( event != 0 ) {
-			n |= bit ;
-			if ( event > 1 ) m |= bit ;
-		}
-		bit *= 2 ;
-	}
-	X[18] = n ;
-	X[22] = m ;
-	
-	n = m = 0 ;
-	bit = 1 ;
-	for ( i = 0; i < 8; i++ ) {
-		event = [ self eventAtRow:i+16 ] ;
-		if ( event != 0 ) {
-			n |= bit ;
-			if ( event > 1 ) m |= bit ;
-		}
-		bit *= 2 ;
-	}
-	X[19] = n ;
-	X[23] = m ;
-	
-	n = m = 0 ;
-	bit = 1 ;
-	for ( i = 0; i < 2; i++ ) {
-		event = [ self eventAtRow:i+24 ] ;
-		if ( event != 0 ) {
-			n |= bit ;
-			if ( event > 1 ) m |= bit ;
-		}
-		bit *= 2 ;
-	}
-	X[20] = n ;
-	X[24] = m ;
-     */
+    b = 0;
+    [ line2EventsSet enumerateIndexesInRange: NSMakeRange(0,7) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
+        {
+           b |= 1 << idx;
+        }
+    ];
+    X[21] = b;
+    
+    b = 0;
+    [ line2EventsSet enumerateIndexesInRange: NSMakeRange(8,15) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
+        {
+           b |= 1 << idx-8;
+        }
+    ];
+    X[22] = b;
+    
+    b = 0;
+    [ line2EventsSet enumerateIndexesInRange: NSMakeRange(16,23) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
+        {
+           b |= 1 << idx-16;
+        }
+    ];
+    X[23] = b;
+    
+    b = 0;
+    [ line2EventsSet enumerateIndexesInRange: NSMakeRange(24,31) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
+        {
+           b |= 1 << idx-24;
+        }
+    ];
+    X[24] = b;
 	
 	n = [ eventDurationStepper intValue ] ;
 	if ( n < 0 ) n= 0 ; else if ( n > 255 ) n = 255 ;
@@ -1178,7 +1183,6 @@ static int abcd( int c )
                     [ line1EventsSet addIndex: j ];
                 }
 			}
-            //[line1Events selectRowIndexes:line1EventsSet byExtendingSelection:YES];
             break ;
 		case 18:
 			for ( j = 0; j < 8; j++ ) {
@@ -1187,7 +1191,6 @@ static int abcd( int c )
                     [ line1EventsSet addIndex: j+8 ];
                 }
 			}
-            //[line1Events selectRowIndexes:line1EventsSet byExtendingSelection:YES];
             break ;
 		case 19:
 			for ( j = 0; j < 8; j++ ) {
@@ -1196,7 +1199,6 @@ static int abcd( int c )
                     [ line1EventsSet addIndex: j+16 ];
                 }
 			}
-            //[line1Events selectRowIndexes:line1EventsSet byExtendingSelection:YES];
             break ;
 		case 20:
 			for ( j = 0; j < 8; j++ ) {
@@ -1205,7 +1207,6 @@ static int abcd( int c )
                     [ line1EventsSet addIndex: j+24 ];
                 }
 			}
-            //[line1Events selectRowIndexes:line1EventsSet byExtendingSelection:YES];
             break ;
 		case 21:
 			for ( j = 0; j < 8; j++ ) {
@@ -1214,7 +1215,6 @@ static int abcd( int c )
                     [ line2EventsSet addIndex: j ];
                 }
 			}
-            //[line2Events selectRowIndexes:line2EventsSet byExtendingSelection:YES];
             break ;
         case 22:
 			for ( j = 0; j < 8; j++ ) {
@@ -1223,7 +1223,6 @@ static int abcd( int c )
                     [ line2EventsSet addIndex: j+8 ];
                 }
 			}
-            //[line2Events selectRowIndexes:line2EventsSet byExtendingSelection:YES];
             break ;
         case 23:
 			for ( j = 0; j < 8; j++ ) {
@@ -1232,7 +1231,6 @@ static int abcd( int c )
                     [ line2EventsSet addIndex: j+16 ];
                 }
 			}
-            //[line2Events selectRowIndexes:line2EventsSet byExtendingSelection:YES];
             break ;
         case 24:
 			for ( j = 0; j < 8; j++ ) {
@@ -1241,7 +1239,6 @@ static int abcd( int c )
                     [ line2EventsSet addIndex: j+24 ];
                 }
 			}
-            //[line2Events selectRowIndexes:line2EventsSet byExtendingSelection:YES];
             break ;
 		case 25:
 			[ eventDurationStepper setIntValue:byte ] ;
@@ -1382,14 +1379,13 @@ static int hexFor( int v )
 		[ lcdLine2Message setStringValue:string ] ;
 		
 		//  event menus
-        [line1EventsSet removeAllIndexes];
-        [line2EventsSet removeAllIndexes];
         count = [ eventList count ] ;
-        prefEvents = [ prefs objectForKey:kMicroKeyerIILine1Events ];
-        if ( prefEvents == nil )
+        prefEvents = [ prefs objectForKey:kMicroKeyerIIEvents ];
+        if ( prefEvents != nil )
         {
             // Read in the old preferences
-            prefEvents = [ prefs objectForKey:kMicroKeyerIIEvents ] ;
+            [line1EventsSet removeAllIndexes];
+            [line2EventsSet removeAllIndexes];
             if ( prefEvents != nil ) {
                 count = [ prefEvents count ];
                 for ( i = 0; i < count; i++ ) {
@@ -1407,29 +1403,8 @@ static int hexFor( int v )
         }
         else
         {
-            // TEB: Read new format here
-            // Start here..
+            // New settings come from the Config string
         }
-        [line1Events selectRowIndexes:line1EventsSet byExtendingSelection:YES];
-        [line2Events selectRowIndexes:line2EventsSet byExtendingSelection:YES];
-        /* TEB
-         count = [ eventsMatrix numberOfRows ] ;
-		for ( i = 0; i < count; i++ ) {
-			event = [ eventsMatrix cellAtRow:i column:0 ] ;
-			defaultIndex[i] = [ event indexOfSelectedItem ] ;
-		}
-		events = [ prefs objectForKey:kMicroKeyerIIEvents ] ;
-		if ( events != nil ) {
-			count = [ events count ] ;
-			if ( count > [ eventsMatrix numberOfRows ] ) count = [ eventsMatrix numberOfRows ] ;
-			for ( i = 0; i < count; i++ ) {
-				string = [ events objectAtIndex:i ] ;
-				event = [ eventsMatrix cellAtRow:i column:0 ] ;
-				[ event selectItemWithTitle:string ] ;
-				if ( [ event indexOfSelectedItem ] < 0 ) [ event selectItemAtIndex:defaultIndex[i] ] ;
-			}
-		}		
-         */
 	}
 	else {
 		if ( isDK2 ) {	
@@ -1499,9 +1474,10 @@ static int hexFor( int v )
 		[ plist setObject:msg2 forKey:kMicroKeyerIILCDMessage2 ] ;
         
         /* TEB: Works, but isn't human readable */
-        setData = [NSKeyedArchiver archivedDataWithRootObject: line1Events];
-        [ plist setObject: setData forKey:kMicroKeyerIILine1Events ];
+        /*setData = [NSKeyedArchiver archivedDataWithRootObject: line1Events];
+        [ plist setObject: setData forKey:kMicroKeyerIILine1Events ];*/
         
+        /*
         count = [ line1Events numberOfRows ];
         if ( count > 0)
         {
@@ -1520,7 +1496,7 @@ static int hexFor( int v )
                 [events addObject: [NSNumber numberWithInt:idx]];
             }];
             [ plist setObject:events forKey: kMicroKeyerIILine2Events];
-        }
+        }*/
         
         
         /* TEB
@@ -1735,7 +1711,50 @@ static int hexFor( int v )
 
 - (id) tableView:(NSTableView *)updateTable objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
-      return [ eventList objectAtIndex: row ];
+    NSMutableIndexSet *set;
+    if ( [[updateTable identifier] isEqualToString:@"Line1"])
+    {
+        set = line1EventsSet;
+    }
+    else
+    {
+        set = line2EventsSet;
+    }
+    if ( [ [ tableColumn identifier ] isEqualToString:@"check" ] )
+    {
+        return [NSNumber numberWithBool:[set containsIndex:row]];
+    }
+    else
+    {
+        return [ eventList objectAtIndex: row ];
+    }
+    
+}
+
+- (void)    tableView:(NSTableView*) tv setObjectValue:(id) val
+       forTableColumn:(NSTableColumn*) aTableColumn row:(NSInteger) rowIndex
+{
+    NSMutableIndexSet *set;
+    if ( [[tv identifier] isEqualToString:@"Line1"])
+    {
+        set = line1EventsSet;
+    }
+    else
+    {
+        set = line2EventsSet;
+    }
+    if([[aTableColumn identifier] isEqualToString:@"check"])
+    {
+        BOOL selected = [val boolValue];
+        
+        // add or remove the object from the selection set
+        
+        if( selected )
+            [set addIndex: rowIndex];
+        else
+            [set removeIndex: rowIndex];
+    }
+	[ self settingChanged:self ] ;
 }
 
 @end
