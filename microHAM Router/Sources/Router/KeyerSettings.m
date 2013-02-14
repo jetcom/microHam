@@ -42,6 +42,7 @@ unsigned char abcdEncoding[] = { 'D', 'B', 'A', 'C' } ;
 		utcTimer = nil ;
 		utcSelection = 0 ;
 		utcRefreshCycle = 0 ;
+        modeBackdoorEnabled = true;
 		for ( i = 0; i < 56; i++ ) settingsString[i] = 0 ;
 		settingsWindow = inSettingsWindow ;
 		
@@ -70,6 +71,8 @@ unsigned char abcdEncoding[] = { 'D', 'B', 'A', 'C' } ;
 				[ self setInterface:cwMatrix to:@selector(settingChanged:) ] ;
 				[ self setInterface:pttDelayField to:@selector(settingChanged:) ] ;
 				[ self setInterface:sidetoneMenu to:@selector(settingChanged:) ] ;
+                
+                [ self setInterface:allowModeOverride to:@selector(overrideSettingChanged:) ];
 				
 				[ self setInterface:pttStepper to:@selector(pttStepperChanged:) ] ;
 				[ self setInterface:wpmStepper to:@selector(wpmChanged:) ] ;
@@ -85,6 +88,7 @@ unsigned char abcdEncoding[] = { 'D', 'B', 'A', 'C' } ;
 				[ self setInterface:d2CwMatrix to:@selector(settingChanged:) ] ;
 				[ self setInterface:d2PttDelayField to:@selector(settingChanged:) ] ;
 				[ self setInterface:d2SidetoneMenu to:@selector(settingChanged:) ] ;
+                [ self setInterface:d2allowModeOverride to:@selector(overrideSettingChanged:) ];
 				
 				[ self setInterface:d2PttStepper to:@selector(pttStepperChanged:) ] ;
 				[ self setInterface:d2WpmStepper to:@selector(wpmChanged:) ] ;
@@ -1377,6 +1381,10 @@ static int hexFor( int v )
 		string = [ prefs objectForKey:kMicroKeyerIILCDMessage2 ] ;
 		if ( string == nil ) string = @"   from microHAM" ;
 		[ lcdLine2Message setStringValue:string ] ;
+        
+        number = [ prefs objectForKey:kMicrokeyerIIEnableModeOverride];
+        modeBackdoorEnabled = ( number != nil ) ?  [number boolValue ] : true ;
+        [ allowModeOverride setState: modeBackdoorEnabled ? NSOnState : NSOffState ];
 		
 		//  event menus
         count = [ eventList count ] ;
@@ -1437,10 +1445,8 @@ static int hexFor( int v )
 - (NSMutableDictionary*)settingsPlist
 {
 	NSMutableDictionary *plist = [ NSMutableDictionary dictionaryWithCapacity:0 ] ;
-    NSData *setData;
-    NSMutableArray *events;
 	NSString *string, *msg1, *msg2 ;
-	int i, n, line1, line2, utc, count;
+	int i, n, line1, line2, utc;
 	float contrast, brightness ;
 	char hexString[113] ;
 	
@@ -1472,44 +1478,7 @@ static int hexFor( int v )
 		[ plist setObject:[ NSNumber numberWithFloat:brightness ] forKey:kMicroKeyerIILCDBrightness ] ;
 		[ plist setObject:msg1 forKey:kMicroKeyerIILCDMessage1 ] ;
 		[ plist setObject:msg2 forKey:kMicroKeyerIILCDMessage2 ] ;
-        
-        /* TEB: Works, but isn't human readable */
-        /*setData = [NSKeyedArchiver archivedDataWithRootObject: line1Events];
-        [ plist setObject: setData forKey:kMicroKeyerIILine1Events ];*/
-        
-        /*
-        count = [ line1Events numberOfRows ];
-        if ( count > 0)
-        {
-			events = [ NSMutableArray arrayWithCapacity:count ] ;
-            [[line1Events selectedRowIndexes] enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
-                [events addObject: [NSNumber numberWithInt:idx]];
-            }];
-            [ plist setObject:events forKey: kMicroKeyerIILine1Events];
-        }
-        
-        count = [ line2Events numberOfRows ];
-        if ( count > 0)
-        {
-			events = [ NSMutableArray arrayWithCapacity:count ] ;
-            [[line2Events selectedRowIndexes] enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
-                [events addObject: [NSNumber numberWithInt:idx]];
-            }];
-            [ plist setObject:events forKey: kMicroKeyerIILine2Events];
-        }*/
-        
-        
-        /* TEB
-		count = [ eventsMatrix numberOfRows ] ;
-		if ( count > 0 ) {
-			events = [ NSMutableArray arrayWithCapacity:count ] ;
-			for ( i = 0; i < count; i++ ) {
-				event = [ eventsMatrix cellAtRow:i column:0 ] ;
-				[ events addObject:[ event titleOfSelectedItem ] ] ;
-			}
-			[ plist setObject:events forKey:kMicroKeyerIIEvents ] ;
-		}
-         */
+        [ plist setObject:[ NSNumber numberWithBool: modeBackdoorEnabled ] forKey:kMicrokeyerIIEnableModeOverride ];
 	}
 	else {
 		line1 = line2 = utc = 0 ;
@@ -1620,6 +1589,11 @@ static int hexFor( int v )
 	[ self setSettingAndStore:NO ] ;
 }
 
+- (void)overrideSettingChanged:(id)sender
+{
+    modeBackdoorEnabled = !modeBackdoorEnabled;
+}
+
 - (void)utcSelectionChanged:(id)sender
 {
 	int previous ;
@@ -1673,6 +1647,8 @@ static int hexFor( int v )
 {
 	int d2Row ;
 	
+    if ( !modeBackdoorEnabled )
+        return;
 		
 	if ( isDK2 == NO ) {
 		if ( index > 5 ) return ;

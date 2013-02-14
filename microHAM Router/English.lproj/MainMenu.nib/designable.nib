@@ -1138,7 +1138,7 @@
 			<object class="NSWindowTemplate" id="513122649">
 				<int key="NSWindowStyleMask">19</int>
 				<int key="NSWindowBacking">2</int>
-				<string key="NSWindowRect">{{167, 618}, {265, 141}}</string>
+				<string key="NSWindowRect">{{167, 618}, {302, 141}}</string>
 				<int key="NSWTFlags">1886912512</int>
 				<string key="NSWindowTitle">microHAM Keyer Mode</string>
 				<object class="NSMutableString" key="NSWindowClass">
@@ -1149,14 +1149,14 @@
 				</object>
 				<nil key="NSUserInterfaceItemIdentifier"/>
 				<object class="NSView" key="NSWindowView" id="627606032">
-					<nil key="NSNextResponder"/>
+					<reference key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSTabView" id="833240440">
 							<reference key="NSNextResponder" ref="627606032"/>
 							<int key="NSvFlags">256</int>
-							<string key="NSFrame">{{-70, -271}, {400, 404}}</string>
+							<string key="NSFrame">{{-49, -271}, {400, 404}}</string>
 							<reference key="NSSuperview" ref="627606032"/>
 							<object class="NSMutableArray" key="NSTabViewItems">
 								<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1186,7 +1186,8 @@
 							</object>
 						</object>
 					</object>
-					<string key="NSFrameSize">{265, 141}</string>
+					<string key="NSFrameSize">{302, 141}</string>
+					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1280, 778}}</string>
 				<string key="NSMaxSize">{10000000000000, 10000000000000}</string>

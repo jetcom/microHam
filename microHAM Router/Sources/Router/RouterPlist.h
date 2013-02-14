@@ -40,6 +40,7 @@
     #define    kMicroKeyerIIEvents          @"microKeyer II Events"
     #define    kMicroKeyerIILine1Events     @"microKeyer II Line 1 Events"
     #define    kMicroKeyerIILine2Events     @"microKeyer II Line 2 Events"
+    #define    kMicrokeyerIIEnableModeOverride          @"microKeyer II Enable Mode Override"
 
     // default
     #define kPlistDirectory "~/Library/Preferences/"

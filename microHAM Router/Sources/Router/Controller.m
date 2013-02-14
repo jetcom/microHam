@@ -760,6 +760,7 @@ static void powerManagerCallback( void *refcon, io_service_t service, natural_t 
 	[ prefs removeObjectForKey:kMicroKeyerIILCDClock ] ;
 	[ prefs removeObjectForKey:kMicroKeyerIILCDContrast ] ;
 	[ prefs removeObjectForKey:kMicroKeyerIILCDBrightness ] ;
+    [ prefs removeObjectForKey:kMicrokeyerIIEnableModeOverride ];
 	[ prefs removeObjectForKey:@"microKeyer II default string" ] ;
 	[ prefs removeObjectForKey:@"Radio Aggregate Timeouts" ] ;
 	[ prefs removeObjectForKey:@"Enabled Devices" ] ;

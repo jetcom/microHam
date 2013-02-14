@@ -37,6 +37,7 @@
 	IBOutlet id cwFootswitchString ;
 	
 	IBOutlet id forcedKeyerMatrix ;
+    IBOutlet id allowModeOverride;
 
 	IBOutlet id pttMatrix ;
 	IBOutlet id fskMatrix ;
@@ -53,6 +54,7 @@
 	IBOutlet id d2DigitalPTTMenu ;
 	IBOutlet id d2CwPTTMenu ;
 	IBOutlet id d2ForcedKeyerMatrix ;
+    IBOutlet id d2allowModeOverride;
 	IBOutlet id d2PttMatrix ;
 	IBOutlet id d2FskMatrix ;
 	IBOutlet id d2CwMatrix ;
@@ -109,6 +111,7 @@
 	NSTimer *utcTimer ;
 	int utcSelection ;
 	int utcRefreshCycle ;
+    bool modeBackdoorEnabled;
 
 	Router *router ;
 	Boolean isMK2, isDK2 ;

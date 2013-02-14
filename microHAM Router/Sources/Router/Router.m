@@ -906,7 +906,6 @@ static struct sockaddr_in *localSocket( in_port_t port )
 		[ keyerSettings setFSKInvert:( controlBytes[2] != 0 ) ] ;
 		break ;
             
-//TEB: Disable routing selection for now since I can't get cocamodem to compile
     case 2:
 		//  v1.61 routing selection
 		[ keyerSettings setRouting:controlBytes[2] ] ;
