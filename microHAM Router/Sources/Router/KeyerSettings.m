@@ -342,7 +342,7 @@ static int abcd( int c )
 {
 	unsigned char *X ;
 	int n, baud ;
-    __block int b;
+    __block int a, b;
 	NSMenuItem *item ;
 
 	X = &settingsString[0] ;
@@ -356,79 +356,71 @@ static int abcd( int c )
 	X[12] = n ;
 
 	//  LCD parameters
-	X[13] = 13 - [ lcdContrast intValue ] ;
+    int contrast = [ lcdContrast intValue];
+	X[13] = 25-contrast;
 	X[14] = [ lcdBrightness intValue ] ;
 	X[15] = [ lcdLine1Setting selectedTag ]  ;
 	X[16] = [ lcdLine2Setting selectedTag ]  ;
 	
-	//  event flags
- /*enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
-                [events addObject: [NSNumber numberWithInt:idx]];
-            }];*/
+    a = 0;
     b = 0;
-    [ line1EventsSet enumerateIndexesInRange: NSMakeRange(0,7) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
-        {
-           b |= 1 << idx;
-        }
-    ];
-    X[17] = b;
+    [ line1EventsSet enumerateIndexesInRange: NSMakeRange(0,8) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
+    {
+        a |= 1 << (idx);
+    }];
+    [ line2EventsSet enumerateIndexesInRange: NSMakeRange(0,8) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
+    {
+        b |= 1 << (idx);
+    }];
     
-    b = 0;
-    [ line1EventsSet enumerateIndexesInRange: NSMakeRange(8,15) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
-        {
-           b |= 1 << idx-8;
-        }
-    ];
-    X[18] = b;
-    
-    b = 0;
-    [ line1EventsSet enumerateIndexesInRange: NSMakeRange(16,23) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
-        {
-           b |= 1 << idx-16;
-        }
-    ];
-    X[19] = b;
-    
-    b = 0;
-    [ line1EventsSet enumerateIndexesInRange: NSMakeRange(24,31) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
-        {
-           b |= 1 << idx-24;
-        }
-    ];
-    X[20] = b;
-	
-    b = 0;
-    [ line2EventsSet enumerateIndexesInRange: NSMakeRange(0,7) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
-        {
-           b |= 1 << idx;
-        }
-    ];
+    X[17] = a|b;
     X[21] = b;
     
+    
+    
+    a = 0;
     b = 0;
-    [ line2EventsSet enumerateIndexesInRange: NSMakeRange(8,15) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
-        {
-           b |= 1 << idx-8;
-        }
-    ];
+    [ line1EventsSet enumerateIndexesInRange: NSMakeRange(8,8) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
+    {
+         a |= 1 << (idx-8);
+    }];
+    [ line2EventsSet enumerateIndexesInRange: NSMakeRange(8,8) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
+    {
+         b |= 1 << (idx-8);
+    }];
+    X[18] = a|b;
     X[22] = b;
     
+    
+    
+    a = 0;
     b = 0;
-    [ line2EventsSet enumerateIndexesInRange: NSMakeRange(16,23) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
-        {
-           b |= 1 << idx-16;
-        }
-    ];
+    [ line1EventsSet enumerateIndexesInRange: NSMakeRange(16,8) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
+    {
+         a |= 1 << (idx-16);
+    }];
+    [ line2EventsSet enumerateIndexesInRange: NSMakeRange(16,8) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
+    {
+         b |= 1 << (idx-16);
+    }];
+    X[19] = a|b;
     X[23] = b;
     
+    
+    
+    a = 0;
     b = 0;
-    [ line2EventsSet enumerateIndexesInRange: NSMakeRange(24,31) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
-        {
-           b |= 1 << idx-24;
-        }
-    ];
+    [ line1EventsSet enumerateIndexesInRange: NSMakeRange(24,8) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
+     {
+         a |= 1 << (idx-24);
+     }];
+    [ line2EventsSet enumerateIndexesInRange: NSMakeRange(24,8) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
+     {
+         b |= 1 << (idx-24);
+     }];
+    X[20] = a|b;
     X[24] = b;
-	
+ 	
 	n = [ eventDurationStepper intValue ] ;
 	if ( n < 0 ) n= 0 ; else if ( n > 255 ) n = 255 ;
 	X[25] = n ;
@@ -1052,7 +1044,7 @@ static int abcd( int c )
 //  change GUI to SETTINGS string
 - (void)changeSettingsToMatchString:(char*)string length:(int)length
 {
-	int i, j, byte, n, mask, baud, tag ;
+	int i, j, byte, b, n, mask, baud, tag ;
 	Boolean qsk ;
 	
 	if ( isDK2 ) {
@@ -1163,7 +1155,7 @@ static int abcd( int c )
 			break ;
 		case 13:
 			n = byte & 0x1f ;
-			if ( n < 0 ) n= 0 ; else if ( n > 19 ) n = 19 ;	//  limit to 19 since 19-25 is too dark
+			if ( n < 8 ) n= 8 ; else if ( n > 25 ) n = 25 ;	//  limit to 8 since < 8 is too light
 			[ lcdContrast setIntValue:n ] ;
 			break ;
 		case 14:
@@ -1182,68 +1174,75 @@ static int abcd( int c )
             [ lcdLine2Setting selectItemWithTag:tag ] ;
 			break ;
 		case 17:
+            b = string[21] & 0xff;
 			for ( j = 0; j < 8; j++ ) {
-                if ( 1<<j & byte  )
+                if (1<<j & byte)
                 {
-                    [ line1EventsSet addIndex: j ];
+                    if ( 1<<j & b )
+                    {
+                        [ line2EventsSet addIndex: j ];
+                    }
+                    else
+                    {
+                        [ line1EventsSet addIndex: j ];
+                    }
                 }
+                
 			}
             break ;
 		case 18:
-			for ( j = 0; j < 8; j++ ) {
-                if ( 1<<j & byte  )
+            b = string[22] & 0xff;
+            for ( j = 0; j < 8; j++ ) {
+                if (1<<j & byte)
                 {
-                    [ line1EventsSet addIndex: j+8 ];
+                    if ( 1<<j & b )
+                    {
+                        [ line2EventsSet addIndex: j ];
+                    }
+                    else
+                    {
+                        [ line1EventsSet addIndex: j ];
+                    }
                 }
-			}
+            }
             break ;
 		case 19:
-			for ( j = 0; j < 8; j++ ) {
-                if ( 1<<j & byte  )
+            b = string[22] & 0xff;
+            for ( j = 0; j < 8; j++ ) {
+                if (1<<j & byte)
                 {
-                    [ line1EventsSet addIndex: j+16 ];
+                    if ( 1<<j & b )
+                    {
+                        [ line2EventsSet addIndex: j ];
+                    }
+                    else
+                    {
+                        [ line1EventsSet addIndex: j ];
+                    }
                 }
-			}
+                    
+            }
             break ;
 		case 20:
-			for ( j = 0; j < 8; j++ ) {
-                if ( 1<<j & byte  )
+            b = string[22] & 0xff;
+            for ( j = 0; j < 8; j++ ) {
+                if (1<<j & byte)
                 {
-                    [ line1EventsSet addIndex: j+24 ];
+                    if ( 1<<j & b )
+                    {
+                        [ line2EventsSet addIndex: j ];
+                    }
+                    else
+                    {
+                        [ line1EventsSet addIndex: j ];
+                    }
                 }
-			}
+            }
             break ;
 		case 21:
-			for ( j = 0; j < 8; j++ ) {
-                if ( 1<<j & byte  )
-                {
-                    [ line2EventsSet addIndex: j ];
-                }
-			}
-            break ;
         case 22:
-			for ( j = 0; j < 8; j++ ) {
-                if ( 1<<j & byte  )
-                {
-                    [ line2EventsSet addIndex: j+8 ];
-                }
-			}
-            break ;
         case 23:
-			for ( j = 0; j < 8; j++ ) {
-                if ( 1<<j & byte  )
-                {
-                    [ line2EventsSet addIndex: j+16 ];
-                }
-			}
-            break ;
         case 24:
-			for ( j = 0; j < 8; j++ ) {
-                if ( 1<<j & byte  )
-                {
-                    [ line2EventsSet addIndex: j+24 ];
-                }
-			}
             break ;
 		case 25:
 			[ eventDurationStepper setIntValue:byte ] ;
@@ -1687,18 +1686,14 @@ static int hexFor( int v )
 
 - (id) tableView:(NSTableView *)updateTable objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
-    NSMutableIndexSet *set;
-    if ( [[updateTable identifier] isEqualToString:@"Line1"])
+    if ( [ [ tableColumn identifier ] isEqualToString:@"line1" ] )
     {
-        set = line1EventsSet;
+        return [NSNumber numberWithBool:[line1EventsSet containsIndex:row]];
     }
-    else
+    else if ( [[ tableColumn identifier ] isEqualToString:@"line2" ])
     {
-        set = line2EventsSet;
-    }
-    if ( [ [ tableColumn identifier ] isEqualToString:@"check" ] )
-    {
-        return [NSNumber numberWithBool:[set containsIndex:row]];
+        return [NSNumber numberWithBool:[line2EventsSet containsIndex:row]];
+
     }
     else
     {
@@ -1710,27 +1705,39 @@ static int hexFor( int v )
 - (void)    tableView:(NSTableView*) tv setObjectValue:(id) val
        forTableColumn:(NSTableColumn*) aTableColumn row:(NSInteger) rowIndex
 {
-    NSMutableIndexSet *set;
-    if ( [[tv identifier] isEqualToString:@"Line1"])
+    NSMutableIndexSet *set1;
+    NSMutableIndexSet *set2;
+
+    if([[aTableColumn identifier] isEqualToString:@"line1"])
     {
-        set = line1EventsSet;
+        set1 = line1EventsSet;
+        set2 = line2EventsSet;
     }
     else
     {
-        set = line2EventsSet;
+        set1 = line2EventsSet;
+        set2 = line1EventsSet;
+
     }
-    if([[aTableColumn identifier] isEqualToString:@"check"])
+    
+    
+    BOOL selected = [val boolValue];
+    if( !selected )
     {
-        BOOL selected = [val boolValue];
+        [set1 removeIndex: rowIndex];
+        [set2 removeIndex: rowIndex];
+    }    
+    else
+    {
+        [set1 addIndex: rowIndex];
+        [set2 removeIndex: rowIndex];
+        [tv reloadData];
         
-        // add or remove the object from the selection set
-        
-        if( selected )
-            [set addIndex: rowIndex];
-        else
-            [set removeIndex: rowIndex];
     }
-	[ self settingChanged:self ] ;
+    
+     
+
+//TEB	[ self settingChanged:self ] ;
 }
 
 @end
