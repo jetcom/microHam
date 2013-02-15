@@ -42,7 +42,6 @@ unsigned char abcdEncoding[] = { 'D', 'B', 'A', 'C' } ;
 		utcTimer = nil ;
 		utcSelection = 0 ;
 		utcRefreshCycle = 0 ;
-        modeBackdoorEnabled = true;
 		for ( i = 0; i < 56; i++ ) settingsString[i] = 0 ;
 		settingsWindow = inSettingsWindow ;
 		
@@ -72,7 +71,7 @@ unsigned char abcdEncoding[] = { 'D', 'B', 'A', 'C' } ;
 				[ self setInterface:pttDelayField to:@selector(settingChanged:) ] ;
 				[ self setInterface:sidetoneMenu to:@selector(settingChanged:) ] ;
                 
-                [ self setInterface:allowModeOverride to:@selector(overrideSettingChanged:) ];
+               // [ self setInterface:allowModeOverride to:@selector(overrideSettingChanged:) ];
 				
 				[ self setInterface:pttStepper to:@selector(pttStepperChanged:) ] ;
 				[ self setInterface:wpmStepper to:@selector(wpmChanged:) ] ;
@@ -88,7 +87,6 @@ unsigned char abcdEncoding[] = { 'D', 'B', 'A', 'C' } ;
 				[ self setInterface:d2CwMatrix to:@selector(settingChanged:) ] ;
 				[ self setInterface:d2PttDelayField to:@selector(settingChanged:) ] ;
 				[ self setInterface:d2SidetoneMenu to:@selector(settingChanged:) ] ;
-                [ self setInterface:d2allowModeOverride to:@selector(overrideSettingChanged:) ];
 				
 				[ self setInterface:d2PttStepper to:@selector(pttStepperChanged:) ] ;
 				[ self setInterface:d2WpmStepper to:@selector(wpmChanged:) ] ;
@@ -135,6 +133,9 @@ unsigned char abcdEncoding[] = { 'D', 'B', 'A', 'C' } ;
 				[ civAddress setRefusesFirstResponder:YES ] ;
 				[ d2CivBaud setRefusesFirstResponder:YES ] ;
 				[ d2CivAddress setRefusesFirstResponder:YES ] ;
+                
+                [ d2allowModeOverride setRefusesFirstResponder:YES ];
+                [ allowModeOverride setRefusesFirstResponder:YES ];
                 
                 
                 eventList = [[NSMutableArray alloc] init];
@@ -1342,6 +1343,7 @@ static int hexFor( int v )
 {
 	int tag, column, i, count;
 	float contrast, brightness ;
+    bool boolean;
 	NSNumber *number ;
 	NSString *string ;
 	NSArray *prefEvents ;
@@ -1383,8 +1385,8 @@ static int hexFor( int v )
 		[ lcdLine2Message setStringValue:string ] ;
         
         number = [ prefs objectForKey:kMicrokeyerIIEnableModeOverride];
-        modeBackdoorEnabled = ( number != nil ) ?  [number boolValue ] : true ;
-        [ allowModeOverride setState: modeBackdoorEnabled ? NSOnState : NSOffState ];
+        boolean = ( number != nil ) ?  [number boolValue ] : true ;
+        [ allowModeOverride setState: boolean ? NSOnState : NSOffState ];
 		
 		//  event menus
         count = [ eventList count ] ;
@@ -1448,6 +1450,7 @@ static int hexFor( int v )
 	NSString *string, *msg1, *msg2 ;
 	int i, n, line1, line2, utc;
 	float contrast, brightness ;
+    bool modeOverride;
 	char hexString[113] ;
 	
 	[ self makeSettingsString ] ;
@@ -1470,6 +1473,8 @@ static int hexFor( int v )
 		brightness = [ lcdBrightness floatValue ] ;
 		msg1 = [ lcdLine1Message stringValue ] ;
 		msg2 = [ lcdLine2Message stringValue ] ;
+        modeOverride = [ allowModeOverride state ];
+                        
 		
 		[ plist setObject:[ NSNumber numberWithInt:line1 ] forKey:kMicroKeyerIILCDLine1 ] ;
 		[ plist setObject:[ NSNumber numberWithInt:line2 ] forKey:kMicroKeyerIILCDLine2 ] ;
@@ -1478,7 +1483,7 @@ static int hexFor( int v )
 		[ plist setObject:[ NSNumber numberWithFloat:brightness ] forKey:kMicroKeyerIILCDBrightness ] ;
 		[ plist setObject:msg1 forKey:kMicroKeyerIILCDMessage1 ] ;
 		[ plist setObject:msg2 forKey:kMicroKeyerIILCDMessage2 ] ;
-        [ plist setObject:[ NSNumber numberWithBool: modeBackdoorEnabled ] forKey:kMicrokeyerIIEnableModeOverride ];
+        [ plist setObject:modeOverride forKey:kMicrokeyerIIEnableModeOverride ];
 	}
 	else {
 		line1 = line2 = utc = 0 ;
@@ -1589,11 +1594,6 @@ static int hexFor( int v )
 	[ self setSettingAndStore:NO ] ;
 }
 
-- (void)overrideSettingChanged:(id)sender
-{
-    modeBackdoorEnabled = !modeBackdoorEnabled;
-}
-
 - (void)utcSelectionChanged:(id)sender
 {
 	int previous ;
@@ -1647,7 +1647,7 @@ static int hexFor( int v )
 {
 	int d2Row ;
 	
-    if ( !modeBackdoorEnabled )
+    if ( ![ allowModeOverride state ])
         return;
 		
 	if ( isDK2 == NO ) {

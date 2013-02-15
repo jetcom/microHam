@@ -111,7 +111,7 @@
 	NSTimer *utcTimer ;
 	int utcSelection ;
 	int utcRefreshCycle ;
-    bool modeBackdoorEnabled;
+   // bool modeBackdoorEnabled;
 
 	Router *router ;
 	Boolean isMK2, isDK2 ;
