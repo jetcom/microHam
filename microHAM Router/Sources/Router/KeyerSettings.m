@@ -360,14 +360,10 @@ static int abcd( int c )
 	X[15] = [ lcdLine1Setting selectedTag ]  ;
 	X[16] = [ lcdLine2Setting selectedTag ]  ;
 	
-	//  event flags
- /*enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
-                [events addObject: [NSNumber numberWithInt:idx]];
-            }];*/
     b = 0;
     [ line1EventsSet enumerateIndexesInRange: NSMakeRange(0,7) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
         {
-           b |= 1 << idx;
+           b |= 1 << (idx);
         }
     ];
     X[17] = b;
@@ -375,7 +371,7 @@ static int abcd( int c )
     b = 0;
     [ line1EventsSet enumerateIndexesInRange: NSMakeRange(8,15) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
         {
-           b |= 1 << idx-8;
+           b |= 1 << (idx-8);
         }
     ];
     X[18] = b;
@@ -383,7 +379,7 @@ static int abcd( int c )
     b = 0;
     [ line1EventsSet enumerateIndexesInRange: NSMakeRange(16,23) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
         {
-           b |= 1 << idx-16;
+           b |= 1 << (idx-16);
         }
     ];
     X[19] = b;
@@ -391,7 +387,7 @@ static int abcd( int c )
     b = 0;
     [ line1EventsSet enumerateIndexesInRange: NSMakeRange(24,31) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
         {
-           b |= 1 << idx-24;
+           b |= 1 << (idx-24);
         }
     ];
     X[20] = b;
@@ -399,7 +395,7 @@ static int abcd( int c )
     b = 0;
     [ line2EventsSet enumerateIndexesInRange: NSMakeRange(0,7) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
         {
-           b |= 1 << idx;
+           b |= 1 << (idx);
         }
     ];
     X[21] = b;
@@ -407,7 +403,7 @@ static int abcd( int c )
     b = 0;
     [ line2EventsSet enumerateIndexesInRange: NSMakeRange(8,15) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
         {
-           b |= 1 << idx-8;
+           b |= 1 << (idx-8);
         }
     ];
     X[22] = b;
@@ -415,7 +411,7 @@ static int abcd( int c )
     b = 0;
     [ line2EventsSet enumerateIndexesInRange: NSMakeRange(16,23) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
         {
-           b |= 1 << idx-16;
+           b |= 1 << (idx-16);
         }
     ];
     X[23] = b;
@@ -423,7 +419,7 @@ static int abcd( int c )
     b = 0;
     [ line2EventsSet enumerateIndexesInRange: NSMakeRange(24,31) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
         {
-           b |= 1 << idx-24;
+           b |= 1 << (idx-24);
         }
     ];
     X[24] = b;
@@ -1687,18 +1683,14 @@ static int hexFor( int v )
 
 - (id) tableView:(NSTableView *)updateTable objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
-    NSMutableIndexSet *set;
-    if ( [[updateTable identifier] isEqualToString:@"Line1"])
+    if ( [ [ tableColumn identifier ] isEqualToString:@"line1" ] )
     {
-        set = line1EventsSet;
+        return [NSNumber numberWithBool:[line1EventsSet containsIndex:row]];
     }
-    else
+    else if ( [[ tableColumn identifier ] isEqualToString:@"line2" ])
     {
-        set = line2EventsSet;
-    }
-    if ( [ [ tableColumn identifier ] isEqualToString:@"check" ] )
-    {
-        return [NSNumber numberWithBool:[set containsIndex:row]];
+        return [NSNumber numberWithBool:[line2EventsSet containsIndex:row]];
+
     }
     else
     {
@@ -1710,27 +1702,39 @@ static int hexFor( int v )
 - (void)    tableView:(NSTableView*) tv setObjectValue:(id) val
        forTableColumn:(NSTableColumn*) aTableColumn row:(NSInteger) rowIndex
 {
-    NSMutableIndexSet *set;
-    if ( [[tv identifier] isEqualToString:@"Line1"])
+    NSMutableIndexSet *set1;
+    NSMutableIndexSet *set2;
+
+    if([[aTableColumn identifier] isEqualToString:@"line1"])
     {
-        set = line1EventsSet;
+        set1 = line1EventsSet;
+        set2 = line2EventsSet;
     }
     else
     {
-        set = line2EventsSet;
+        set1 = line2EventsSet;
+        set2 = line1EventsSet;
+
     }
-    if([[aTableColumn identifier] isEqualToString:@"check"])
+    
+    
+    BOOL selected = [val boolValue];
+    if( !selected )
     {
-        BOOL selected = [val boolValue];
+        [set1 removeIndex: rowIndex];
+        [set2 removeIndex: rowIndex];
+    }    
+    else
+    {
+        [set1 addIndex: rowIndex];
+        [set2 removeIndex: rowIndex];
+        [tv reloadData];
         
-        // add or remove the object from the selection set
-        
-        if( selected )
-            [set addIndex: rowIndex];
-        else
-            [set removeIndex: rowIndex];
     }
-	[ self settingChanged:self ] ;
+    
+     
+
+//TEB	[ self settingChanged:self ] ;
 }
 
 @end
