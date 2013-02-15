@@ -363,11 +363,11 @@ static int abcd( int c )
 	
     a = 0;
     b = 0;
-    [ line1EventsSet enumerateIndexesInRange: NSMakeRange(0,7) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
+    [ line1EventsSet enumerateIndexesInRange: NSMakeRange(0,8) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
     {
         a |= 1 << (idx);
     }];
-    [ line2EventsSet enumerateIndexesInRange: NSMakeRange(0,7) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
+    [ line2EventsSet enumerateIndexesInRange: NSMakeRange(0,8) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
     {
         b |= 1 << (idx);
     }];
@@ -379,11 +379,11 @@ static int abcd( int c )
     
     a = 0;
     b = 0;
-    [ line1EventsSet enumerateIndexesInRange: NSMakeRange(8,15) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
+    [ line1EventsSet enumerateIndexesInRange: NSMakeRange(8,8) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
     {
          a |= 1 << (idx-8);
     }];
-    [ line2EventsSet enumerateIndexesInRange: NSMakeRange(8,15) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
+    [ line2EventsSet enumerateIndexesInRange: NSMakeRange(8,8) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
     {
          b |= 1 << (idx-8);
     }];
@@ -394,11 +394,11 @@ static int abcd( int c )
     
     a = 0;
     b = 0;
-    [ line1EventsSet enumerateIndexesInRange: NSMakeRange(16,23) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
+    [ line1EventsSet enumerateIndexesInRange: NSMakeRange(16,8) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
     {
          a |= 1 << (idx-16);
     }];
-    [ line2EventsSet enumerateIndexesInRange: NSMakeRange(16,23) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
+    [ line2EventsSet enumerateIndexesInRange: NSMakeRange(16,8) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
     {
          b |= 1 << (idx-16);
     }];
@@ -409,11 +409,11 @@ static int abcd( int c )
     
     a = 0;
     b = 0;
-    [ line1EventsSet enumerateIndexesInRange: NSMakeRange(24,31) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
+    [ line1EventsSet enumerateIndexesInRange: NSMakeRange(24,8) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
      {
          a |= 1 << (idx-24);
      }];
-    [ line2EventsSet enumerateIndexesInRange: NSMakeRange(24,31) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
+    [ line2EventsSet enumerateIndexesInRange: NSMakeRange(24,8) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
      {
          b |= 1 << (idx-24);
      }];
