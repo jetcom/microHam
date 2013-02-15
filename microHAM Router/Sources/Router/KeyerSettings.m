@@ -341,7 +341,7 @@ static int abcd( int c )
 {
 	unsigned char *X ;
 	int n, baud ;
-    __block int b;
+    __block int a, b;
 	NSMenuItem *item ;
 
 	X = &settingsString[0] ;
@@ -355,75 +355,71 @@ static int abcd( int c )
 	X[12] = n ;
 
 	//  LCD parameters
-	X[13] = 13 - [ lcdContrast intValue ] ;
+    int contrast = [ lcdContrast intValue];
+	X[13] = 25-contrast;
 	X[14] = [ lcdBrightness intValue ] ;
 	X[15] = [ lcdLine1Setting selectedTag ]  ;
 	X[16] = [ lcdLine2Setting selectedTag ]  ;
 	
+    a = 0;
     b = 0;
     [ line1EventsSet enumerateIndexesInRange: NSMakeRange(0,7) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
-        {
-           b |= 1 << (idx);
-        }
-    ];
-    X[17] = b;
-    
-    b = 0;
-    [ line1EventsSet enumerateIndexesInRange: NSMakeRange(8,15) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
-        {
-           b |= 1 << (idx-8);
-        }
-    ];
-    X[18] = b;
-    
-    b = 0;
-    [ line1EventsSet enumerateIndexesInRange: NSMakeRange(16,23) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
-        {
-           b |= 1 << (idx-16);
-        }
-    ];
-    X[19] = b;
-    
-    b = 0;
-    [ line1EventsSet enumerateIndexesInRange: NSMakeRange(24,31) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
-        {
-           b |= 1 << (idx-24);
-        }
-    ];
-    X[20] = b;
-	
-    b = 0;
+    {
+        a |= 1 << (idx);
+    }];
     [ line2EventsSet enumerateIndexesInRange: NSMakeRange(0,7) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
-        {
-           b |= 1 << (idx);
-        }
-    ];
+    {
+        b |= 1 << (idx);
+    }];
+    
+    X[17] = a|b;
     X[21] = b;
     
+    
+    
+    a = 0;
     b = 0;
+    [ line1EventsSet enumerateIndexesInRange: NSMakeRange(8,15) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
+    {
+         a |= 1 << (idx-8);
+    }];
     [ line2EventsSet enumerateIndexesInRange: NSMakeRange(8,15) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
-        {
-           b |= 1 << (idx-8);
-        }
-    ];
+    {
+         b |= 1 << (idx-8);
+    }];
+    X[18] = a|b;
     X[22] = b;
     
+    
+    
+    a = 0;
     b = 0;
+    [ line1EventsSet enumerateIndexesInRange: NSMakeRange(16,23) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
+    {
+         a |= 1 << (idx-16);
+    }];
     [ line2EventsSet enumerateIndexesInRange: NSMakeRange(16,23) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
-        {
-           b |= 1 << (idx-16);
-        }
-    ];
+    {
+         b |= 1 << (idx-16);
+    }];
+    X[19] = a|b;
     X[23] = b;
     
+    
+    
+    a = 0;
     b = 0;
+    [ line1EventsSet enumerateIndexesInRange: NSMakeRange(24,31) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
+     {
+         a |= 1 << (idx-24);
+     }];
     [ line2EventsSet enumerateIndexesInRange: NSMakeRange(24,31) options: 0 usingBlock:^(NSUInteger idx, BOOL *stop)
-        {
-           b |= 1 << (idx-24);
-        }
-    ];
+     {
+         b |= 1 << (idx-24);
+     }];
+    X[20] = a|b;
     X[24] = b;
-	
+ 	
 	n = [ eventDurationStepper intValue ] ;
 	if ( n < 0 ) n= 0 ; else if ( n > 255 ) n = 255 ;
 	X[25] = n ;
@@ -1047,7 +1043,7 @@ static int abcd( int c )
 //  change GUI to SETTINGS string
 - (void)changeSettingsToMatchString:(char*)string length:(int)length
 {
-	int i, j, byte, n, mask, baud, tag ;
+	int i, j, byte, b, n, mask, baud, tag ;
 	Boolean qsk ;
 	
 	if ( isDK2 ) {
@@ -1158,7 +1154,7 @@ static int abcd( int c )
 			break ;
 		case 13:
 			n = byte & 0x1f ;
-			if ( n < 0 ) n= 0 ; else if ( n > 19 ) n = 19 ;	//  limit to 19 since 19-25 is too dark
+			if ( n < 8 ) n= 8 ; else if ( n > 25 ) n = 25 ;	//  limit to 8 since < 8 is too light
 			[ lcdContrast setIntValue:n ] ;
 			break ;
 		case 14:
@@ -1177,68 +1173,75 @@ static int abcd( int c )
             [ lcdLine2Setting selectItemWithTag:tag ] ;
 			break ;
 		case 17:
+            b = string[21] & 0xff;
 			for ( j = 0; j < 8; j++ ) {
-                if ( 1<<j & byte  )
+                if (1<<j & byte)
                 {
-                    [ line1EventsSet addIndex: j ];
+                    if ( 1<<j & b )
+                    {
+                        [ line2EventsSet addIndex: j ];
+                    }
+                    else
+                    {
+                        [ line1EventsSet addIndex: j ];
+                    }
                 }
+                
 			}
             break ;
 		case 18:
-			for ( j = 0; j < 8; j++ ) {
-                if ( 1<<j & byte  )
+            b = string[22] & 0xff;
+            for ( j = 0; j < 8; j++ ) {
+                if (1<<j & byte)
                 {
-                    [ line1EventsSet addIndex: j+8 ];
+                    if ( 1<<j & b )
+                    {
+                        [ line2EventsSet addIndex: j ];
+                    }
+                    else
+                    {
+                        [ line1EventsSet addIndex: j ];
+                    }
                 }
-			}
+            }
             break ;
 		case 19:
-			for ( j = 0; j < 8; j++ ) {
-                if ( 1<<j & byte  )
+            b = string[22] & 0xff;
+            for ( j = 0; j < 8; j++ ) {
+                if (1<<j & byte)
                 {
-                    [ line1EventsSet addIndex: j+16 ];
+                    if ( 1<<j & b )
+                    {
+                        [ line2EventsSet addIndex: j ];
+                    }
+                    else
+                    {
+                        [ line1EventsSet addIndex: j ];
+                    }
                 }
-			}
+                    
+            }
             break ;
 		case 20:
-			for ( j = 0; j < 8; j++ ) {
-                if ( 1<<j & byte  )
+            b = string[22] & 0xff;
+            for ( j = 0; j < 8; j++ ) {
+                if (1<<j & byte)
                 {
-                    [ line1EventsSet addIndex: j+24 ];
+                    if ( 1<<j & b )
+                    {
+                        [ line2EventsSet addIndex: j ];
+                    }
+                    else
+                    {
+                        [ line1EventsSet addIndex: j ];
+                    }
                 }
-			}
+            }
             break ;
 		case 21:
-			for ( j = 0; j < 8; j++ ) {
-                if ( 1<<j & byte  )
-                {
-                    [ line2EventsSet addIndex: j ];
-                }
-			}
-            break ;
         case 22:
-			for ( j = 0; j < 8; j++ ) {
-                if ( 1<<j & byte  )
-                {
-                    [ line2EventsSet addIndex: j+8 ];
-                }
-			}
-            break ;
         case 23:
-			for ( j = 0; j < 8; j++ ) {
-                if ( 1<<j & byte  )
-                {
-                    [ line2EventsSet addIndex: j+16 ];
-                }
-			}
-            break ;
         case 24:
-			for ( j = 0; j < 8; j++ ) {
-                if ( 1<<j & byte  )
-                {
-                    [ line2EventsSet addIndex: j+24 ];
-                }
-			}
             break ;
 		case 25:
 			[ eventDurationStepper setIntValue:byte ] ;
