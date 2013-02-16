@@ -1197,44 +1197,44 @@ static int abcd( int c )
                 {
                     if ( 1<<j & b )
                     {
-                        [ line2EventsSet addIndex: j ];
+                        [ line2EventsSet addIndex: j + 8];
                     }
                     else
                     {
-                        [ line1EventsSet addIndex: j ];
+                        [ line1EventsSet addIndex: j + 8];
                     }
                 }
             }
             break ;
 		case 19:
-            b = string[22] & 0xff;
+            b = string[23] & 0xff;
             for ( j = 0; j < 8; j++ ) {
                 if (1<<j & byte)
                 {
                     if ( 1<<j & b )
                     {
-                        [ line2EventsSet addIndex: j ];
+                        [ line2EventsSet addIndex: j + 16];
                     }
                     else
                     {
-                        [ line1EventsSet addIndex: j ];
+                        [ line1EventsSet addIndex: j + 16 ];
                     }
                 }
                     
             }
             break ;
 		case 20:
-            b = string[22] & 0xff;
+            b = string[24] & 0xff;
             for ( j = 0; j < 8; j++ ) {
                 if (1<<j & byte)
                 {
                     if ( 1<<j & b )
                     {
-                        [ line2EventsSet addIndex: j ];
+                        [ line2EventsSet addIndex: j + 24 ];
                     }
                     else
                     {
-                        [ line1EventsSet addIndex: j ];
+                        [ line1EventsSet addIndex: j + 24 ];
                     }
                 }
             }
@@ -1472,7 +1472,7 @@ static int hexFor( int v )
 		brightness = [ lcdBrightness floatValue ] ;
 		msg1 = [ lcdLine1Message stringValue ] ;
 		msg2 = [ lcdLine2Message stringValue ] ;
-        modeOverride = [ allowModeOverride state ];
+        modeOverride = [allowModeOverride state ];
                         
 		
 		[ plist setObject:[ NSNumber numberWithInt:line1 ] forKey:kMicroKeyerIILCDLine1 ] ;
@@ -1482,7 +1482,9 @@ static int hexFor( int v )
 		[ plist setObject:[ NSNumber numberWithFloat:brightness ] forKey:kMicroKeyerIILCDBrightness ] ;
 		[ plist setObject:msg1 forKey:kMicroKeyerIILCDMessage1 ] ;
 		[ plist setObject:msg2 forKey:kMicroKeyerIILCDMessage2 ] ;
-        [ plist setObject:modeOverride forKey:kMicrokeyerIIEnableModeOverride ];
+   //     [ plist setObject:[ NSNumber]modeOverride forKey:kMicrokeyerIIEnableModeOverride ];
+        [ plist setObject:[ NSNumber numberWithBool:( [ allowModeOverride state ] == NSOnState )  ] forKey:kMicrokeyerIIEnableModeOverride ] ;
+
 	}
 	else {
 		line1 = line2 = utc = 0 ;
@@ -1688,6 +1690,11 @@ static int hexFor( int v )
 {
     if ( [ [ tableColumn identifier ] isEqualToString:@"line1" ] )
     {
+        // Just to make sure we don't have duplicate buttons
+        if ([ line2EventsSet containsIndex:row ])
+        {
+         //   [line2EventsSet removeIndex: row];
+        }
         return [NSNumber numberWithBool:[line1EventsSet containsIndex:row]];
     }
     else if ( [[ tableColumn identifier ] isEqualToString:@"line2" ])
