@@ -32,6 +32,7 @@
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		97A7FB1916CFED5800CC7E52 /* WinKeyer.xib in Resources */ = {isa = PBXBuildFile; fileRef = 97A7FB1816CFED5800CC7E52 /* WinKeyer.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -82,6 +83,7 @@
 		84F2677E0F6AD03C009C0528 /* UDP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UDP.h; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* µH Router.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "µH Router.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		97A7FB1816CFED5800CC7E52 /* WinKeyer.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = WinKeyer.xib; path = Sources/Router/WinKeyer.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,6 +162,7 @@
 				842CAAF50F701C35009502F8 /* KeyerSettings.nib */,
 				845910C00A2770E4000B3BB2 /* RouterTest.nib */,
 				8459108F0A276D6B000B3BB2 /* KeyerTest.nib */,
+				97A7FB1816CFED5800CC7E52 /* WinKeyer.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -280,6 +283,7 @@
 				84B584D60A602E7D00D29602 /* Versions in Resources */,
 				842CA3BA0F6C527A009502F8 /* KeyerMode.nib in Resources */,
 				842CAAF70F701C35009502F8 /* KeyerSettings.nib in Resources */,
+				97A7FB1916CFED5800CC7E52 /* WinKeyer.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

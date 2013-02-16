@@ -29,6 +29,8 @@
 		IBOutlet id debugBytesButton ;
 		
 		IBOutlet id diagWindowMenu ;
+        
+        IBOutlet id winKeyPrefPanel;
 		
 		NamedFIFOPair *mainFIFO ;
 		

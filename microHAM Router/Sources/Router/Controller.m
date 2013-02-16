@@ -363,6 +363,12 @@ static void powerManagerCallback( void *refcon, io_service_t service, natural_t 
 	[ NSApp activateIgnoringOtherApps:YES ] ; 	
 }
 
+- (IBAction)openWinKeyPrefs:(id)sender
+{
+    [ winKeyPrefPanel openPanel ];
+    [ NSApp activateIgnoringOtherApps:YES];
+}
+
 //	return a list of non-dummy keyers
 - (Router*)keyerAtIndex:(int)p
 {
