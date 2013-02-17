@@ -10,11 +10,12 @@
 #import "Router.h"
 #import "RouterPlist.h"
 #import "RouterCommands.h"
+#import "WinKeyer.h"
 #import <IOKit/serial/IOSerialKeys.h>
 #import <IOKit/IOMessage.h>
 #include <sys/stat.h>
 
-#define ROUTERTEST
+#define ROUTERTEST 1
 
 @implementation Controller
 
@@ -58,7 +59,10 @@ static void powerManagerCallback( void *refcon, io_service_t service, natural_t 
 	prototype[prototypes] = [ [ Router alloc ] initPrototype:@"digiKeyer" fifo:@"/tmp/digiRouter" deviceName:@"usbserial-DK" command:OPENDIGIKEYER controller:self ] ;
 	[ prototype[prototypes] setHasWINKEY:NO ] ;
 	prototypes++ ;
-
+    
+	winKeyer = [ [ WinKeyer alloc ] initIntoWindow:winKeyPrefPanel router:self ] ;
+        //[ WinkeyerSettingsWindow setTitle:title ] ;
+    
 	Log( debug, "updating from plist\n" ) ;
 	[ self initFromPlist ] ;
 	[ self pickupMicroHamDevices ] ;
@@ -365,7 +369,7 @@ static void powerManagerCallback( void *refcon, io_service_t service, natural_t 
 
 - (IBAction)openWinKeyPrefs:(id)sender
 {
-    [ winKeyPrefPanel openPanel ];
+    [ winKeyPrefPanel orderFront:self ];
     [ NSApp activateIgnoringOtherApps:YES];
 }
 

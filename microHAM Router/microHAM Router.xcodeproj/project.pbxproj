@@ -32,6 +32,7 @@
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		9727C95516D074250013B7A3 /* WinKeyer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9727C95416D074250013B7A3 /* WinKeyer.m */; };
 		97A7FB1916CFED5800CC7E52 /* WinKeyer.xib in Resources */ = {isa = PBXBuildFile; fileRef = 97A7FB1816CFED5800CC7E52 /* WinKeyer.xib */; };
 /* End PBXBuildFile section */
 
@@ -83,6 +84,8 @@
 		84F2677E0F6AD03C009C0528 /* UDP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UDP.h; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* µH Router.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "µH Router.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9727C95316D074250013B7A3 /* WinKeyer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WinKeyer.h; sourceTree = "<group>"; };
+		9727C95416D074250013B7A3 /* WinKeyer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WinKeyer.m; sourceTree = "<group>"; };
 		97A7FB1816CFED5800CC7E52 /* WinKeyer.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = WinKeyer.xib; path = Sources/Router/WinKeyer.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -198,6 +201,8 @@
 				841A6CF711CD82F4004DC6E8 /* Router.h */,
 				841A6CF811CD82F4004DC6E8 /* Router.m */,
 				842CAB7D0F7051A8009502F8 /* KeyerSettings.h */,
+				9727C95316D074250013B7A3 /* WinKeyer.h */,
+				9727C95416D074250013B7A3 /* WinKeyer.m */,
 				842CAB7E0F7051A8009502F8 /* KeyerSettings.m */,
 				84E89A7B0A320CAE0068824E /* ReplyBuf.h */,
 				84E89A7C0A320CAE0068824E /* ReplyBuf.m */,
@@ -307,6 +312,7 @@
 				842CA3AB0F6C4EA8009502F8 /* KeyerMode.m in Sources */,
 				842CAB7F0F7051A8009502F8 /* KeyerSettings.m in Sources */,
 				841A6CF911CD82F4004DC6E8 /* Router.m in Sources */,
+				9727C95516D074250013B7A3 /* WinKeyer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

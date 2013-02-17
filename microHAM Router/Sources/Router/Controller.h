@@ -12,6 +12,7 @@
 	#import "RouterTest.h"
 	#import "NamedFIFOPair.h"
 	#import "KeyerMode.h"
+    #import "WinKeyer.h"
 	
 	@interface Controller : NSScriptCommand {
 
@@ -33,6 +34,8 @@
         IBOutlet id winKeyPrefPanel;
 		
 		NamedFIFOPair *mainFIFO ;
+        
+        WinKeyer *winKeyer;
 		
 		// v1.40  UDP
 		int routerSocket ;
