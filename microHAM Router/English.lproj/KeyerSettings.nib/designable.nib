@@ -3399,7 +3399,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</bytes>
 				<string key="NSClassName">NSView</string>
 			</object>
 			<object class="NSCustomView" id="508444203">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">256</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="NSBox" id="633100695">
@@ -6315,7 +6315,6 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</bytes>
 					</object>
 				</array>
 				<string key="NSFrameSize">{780, 407}</string>
-				<reference key="NSSuperview"/>
 				<reference key="NSNextKeyView" ref="480404636"/>
 				<string key="NSClassName">NSView</string>
 			</object>
@@ -6329,7 +6328,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</bytes>
 				<nil key="NSViewClass"/>
 				<nil key="NSUserInterfaceItemIdentifier"/>
 				<object class="NSView" key="NSWindowView" id="304477035">
-					<reference key="NSNextResponder"/>
+					<nil key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<array class="NSMutableArray" key="NSSubviews">
 						<object class="NSBox" id="304796293">
@@ -10221,7 +10220,6 @@ AAAAAAAAAAAAAA</bytes>
 						</object>
 					</array>
 					<string key="NSFrameSize">{781, 669}</string>
-					<reference key="NSSuperview"/>
 					<reference key="NSNextKeyView" ref="304796293"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1280, 778}}</string>
@@ -10856,12 +10854,12 @@ AAAAAAAAAAAAAA</bytes>
 						<array class="NSMutableArray" key="children">
 							<reference ref="339034839"/>
 							<reference ref="492091675"/>
-							<reference ref="17433788"/>
 							<reference ref="1067460201"/>
 							<reference ref="300833960"/>
 							<reference ref="117501733"/>
 							<reference ref="235035254"/>
 							<reference ref="321695465"/>
+							<reference ref="17433788"/>
 						</array>
 						<reference key="parent" ref="0"/>
 						<string key="objectName">Settings View</string>

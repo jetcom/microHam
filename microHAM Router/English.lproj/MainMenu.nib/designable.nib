@@ -702,7 +702,6 @@
 							<string key="NSFrame">{{-13, -188}, {394, 404}}</string>
 							<reference key="NSSuperview" ref="973253610"/>
 							<reference key="NSWindow"/>
-							<reference key="NSNextKeyView" ref="139727077"/>
 							<object class="NSMutableArray" key="NSTabViewItems">
 								<bool key="EncodedWithXMLCoder">YES</bool>
 								<object class="NSTabViewItem" id="137477747">
@@ -715,7 +714,6 @@
 										<string key="NSFrame">{{10, 25}, {374, 366}}</string>
 										<reference key="NSSuperview" ref="630555624"/>
 										<reference key="NSWindow"/>
-										<reference key="NSNextKeyView"/>
 									</object>
 									<string key="NSLabel">No device Found</string>
 									<object class="NSColor" key="NSColor" id="1013321606">
@@ -826,7 +824,7 @@
 			<object class="NSWindowTemplate" id="88776870">
 				<int key="NSWindowStyleMask">7</int>
 				<int key="NSWindowBacking">2</int>
-				<string key="NSWindowRect">{{196, 59}, {646, 451}}</string>
+				<string key="NSWindowRect">{{285, 166}, {646, 451}}</string>
 				<int key="NSWTFlags">1677721600</int>
 				<string key="NSWindowTitle">microHAM Router Debug Window</string>
 				<string key="NSWindowClass">NSWindow</string>
@@ -876,7 +874,7 @@
 											<string key="NSFrameSize">{646, 401}</string>
 											<reference key="NSSuperview" ref="297889820"/>
 											<reference key="NSWindow"/>
-											<reference key="NSNextKeyView" ref="1065136829"/>
+											<reference key="NSNextKeyView" ref="77436583"/>
 											<object class="NSTextContainer" key="NSTextContainer" id="160207662">
 												<object class="NSLayoutManager" key="NSLayoutManager">
 													<object class="NSTextStorage" key="NSTextStorage">
@@ -1016,7 +1014,7 @@
 							<string key="NSFrame">{{-1, 49}, {648, 403}}</string>
 							<reference key="NSSuperview" ref="965394036"/>
 							<reference key="NSWindow"/>
-							<reference key="NSNextKeyView" ref="77436583"/>
+							<reference key="NSNextKeyView" ref="297889820"/>
 							<int key="NSsFlags">133138</int>
 							<reference key="NSVScroller" ref="1065136829"/>
 							<reference key="NSHScroller" ref="77436583"/>
@@ -1146,7 +1144,6 @@
 							<string key="NSFrame">{{514, 10}, {82, 28}}</string>
 							<reference key="NSSuperview" ref="965394036"/>
 							<reference key="NSWindow"/>
-							<reference key="NSNextKeyView"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSButtonCell" key="NSCell" id="276826837">
 								<int key="NSCellFlags">67108864</int>
@@ -1221,7 +1218,6 @@
 							<string key="NSFrame">{{-49, -271}, {400, 404}}</string>
 							<reference key="NSSuperview" ref="627606032"/>
 							<reference key="NSWindow"/>
-							<reference key="NSNextKeyView" ref="305498732"/>
 							<object class="NSMutableArray" key="NSTabViewItems">
 								<bool key="EncodedWithXMLCoder">YES</bool>
 								<object class="NSTabViewItem" id="374767482">
@@ -1234,7 +1230,6 @@
 										<string key="NSFrame">{{10, 25}, {380, 366}}</string>
 										<reference key="NSSuperview" ref="833240440"/>
 										<reference key="NSWindow"/>
-										<reference key="NSNextKeyView"/>
 									</object>
 									<string key="NSLabel">No device found</string>
 									<reference key="NSColor" ref="1013321606"/>
@@ -1264,7 +1259,7 @@
 			<object class="NSWindowTemplate" id="643161688">
 				<int key="NSWindowStyleMask">19</int>
 				<int key="NSWindowBacking">2</int>
-				<string key="NSWindowRect">{{1003, 688}, {522, 251}}</string>
+				<string key="NSWindowRect">{{162, 240}, {522, 271}}</string>
 				<int key="NSWTFlags">1618477056</int>
 				<string key="NSWindowTitle">WinKey Configration</string>
 				<string key="NSWindowClass">NSPanel</string>
@@ -1276,10 +1271,9 @@
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
 					</object>
-					<string key="NSFrameSize">{522, 251}</string>
+					<string key="NSFrameSize">{522, 271}</string>
 					<reference key="NSSuperview"/>
 					<reference key="NSWindow"/>
-					<reference key="NSNextKeyView"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1280, 778}}</string>
 				<string key="NSMaxSize">{10000000000000, 10000000000000}</string>
