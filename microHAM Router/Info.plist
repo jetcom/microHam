@@ -9,7 +9,7 @@
 	<key>CFBundleIconFile</key>
 	<string>knob</string>
 	<key>CFBundleIdentifier</key>
-	<string>w7ay.mH Router</string>
+	<string>w7ay.mHRouter</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -19,7 +19,7 @@
 	<key>CFBundleSignature</key>
 	<string>OMmK</string>
 	<key>CFBundleVersion</key>
-	<string>1.91</string>
+	<string>1.92 (b1)</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.utilities</string>
 	<key>NSAppleScriptEnabled</key>

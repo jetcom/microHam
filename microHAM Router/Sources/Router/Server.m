@@ -805,8 +805,7 @@ static int fifoLatency( int fd )
 	//  v1.11  accumulate as much data as possible
 	[ radioDataTimer setFireDate:[ NSDate distantFuture ] ] ;		//  v1.11p
 	[ radioDataLock lock ] ;
-	if ( radioDataCount > 63 ) radioDataCount = 63 ;				// sanity check to make sure buffer does not overflow!
-	if ( debugRadioPort ) {
+    if ( debugRadioPort ) {
 		// v1.11u -- send 32 bits per data byte
 		radioDataBuffer[radioDataCount] = ( debugRadioPortCount/65536 ) & 0xff ;
 		radioDataCount++ ;
@@ -822,18 +821,20 @@ static int fifoLatency( int fd )
 		radioDataBuffer[radioDataCount] = data ;
 		radioDataCount++ ;
 	}
-	
-	if ( radioDataCount >= 64 ) {									//  v1.11h (increased from 32)
-		//  flush buffer
-		[ self receivedString:radioDataBuffer length:radioDataCount typefd:radiofd ] ;
-		radioDataCount = 0 ;
-	}
-	else {
+    [ self receivedString:radioDataBuffer length:radioDataCount typefd:radiofd ] ;
+    radioDataCount = 0 ;
+/*
+    if ( radioDataCount > 63 ) {
+    
+    }
+    else
+    {
 		//  ask timer to fire N ms from now if nothing arrives earlier
 		[ radioDataLock unlock ] ; // v1.11o unlock before firing timer
+         NSLog(@"Setting timer to  %f...\n", radioAggregateTimeout);
 		[ radioDataTimer setFireDate:[ NSDate dateWithTimeIntervalSinceNow:radioAggregateTimeout ] ] ;		// v0.11t
 		return ;	//  v1.11o
-	}
+	}*/
 	[ radioDataLock unlock ] ;
 }
 
