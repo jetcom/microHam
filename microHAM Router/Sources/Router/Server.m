@@ -61,7 +61,7 @@ static int fifoLatency( int fd )
 	if ( self ) {
 		router = control ;
 		baseName = [ fifoName retain ] ;
-		radioAggregateTimeout = 0.02 ;		//  20 ms -- best for FT-1000MP
+	//	radioAggregateTimeout = 0.02 ;		//  20 ms -- best for FT-1000MP
 		debugRadioPort = NO ;
 		debugRadioPortCount = 0 ;
 		
@@ -75,10 +75,10 @@ static int fifoLatency( int fd )
 		debug = NO ;
 		logToConsole = NO ;		//  v1.11
 		//  radio data buffering
-		radioDataLock = [ [ NSLock alloc ] init ] ;
-		radioDataCount = 0 ;
+	//	radioDataLock = [ [ NSLock alloc ] init ] ;
+	//	radioDataCount = 0 ;
 		totalRadioCount = 0 ;
-		radioDataTimer = [ [ NSTimer scheduledTimerWithTimeInterval:800000.0 target:self selector:@selector(radioDataCheck:) userInfo:self repeats:YES ] retain ] ;
+	//	radioDataTimer = [ [ NSTimer scheduledTimerWithTimeInterval:radioAggregateTimeout target:self selector:@selector(radioDataCheck:) userInfo:self repeats:YES ] retain ] ;
 		//  control buffering
 		controlLock = [ [ NSLock alloc ] init ] ;
 		controlCount = 0 ;
@@ -134,7 +134,7 @@ static int fifoLatency( int fd )
 {
 	if ( backdoorFIFO ) [ backdoorFIFO release ] ;
 	if ( writeLock ) [ writeLock release ] ;
-	if ( radioDataTimer ) [ radioDataTimer release ] ;
+//	if ( radioDataTimer ) [ radioDataTimer release ] ;
 	if ( controlTimer ) [ controlTimer release ] ;
 	[ super dealloc ] ;
 }
@@ -142,7 +142,14 @@ static int fifoLatency( int fd )
 //  v1.11t
 - (void)setRadioAggregateTimeout:(float)value
 {
-	radioAggregateTimeout = value ;
+/*	radioAggregateTimeout = value ;
+    if ( radioDataTimer)
+    {
+        [ radioDataTimer invalidate ];
+        radioDataTimer = nil;
+        radioDataTimer = [ NSTimer scheduledTimerWithTimeInterval:radioAggregateTimeout target:self selector:@selector(radioDataCheck:) userInfo:self repeats:YES ];
+    }*/
+  //  [ radioDataTimer scheduledTimerWithTimeInterval:radioAggregateTimeout ];
 }
 
 - (Boolean)hasWinKey
@@ -787,23 +794,33 @@ static int fifoLatency( int fd )
 //  flush radio data if it has timed out, sleep for a long time, otherwise
 - (void)radioDataCheck:(NSTimer*)timer
 {
-	[ radioDataTimer setFireDate:[ NSDate distantFuture ] ] ;		//  v1.11p
-	[ radioDataLock lock ] ;
-	//  set timer back to idling period
+/*	[ radioDataLock lock ] ;
 	if ( radioDataCount > 0 ) {
 		//  send buffer if we actually have data
 		[ self receivedString:radioDataBuffer length:radioDataCount typefd:radiofd ] ;
 		radioDataCount = 0 ;
 	}
-	[ radioDataLock unlock ] ;
+	[ radioDataLock unlock ] ;*/
 }
 
 //  new RADIO byte received from Keyer
 //  accumulate as long a string as possible, flush data from here if it reaches the buffer limit, or send it from the radioDataTimer if the timeoutHas exceeded.
 - (void)receivedRadio:(int)data
 {
-	//  v1.11  accumulate as much data as possible
-	[ radioDataTimer setFireDate:[ NSDate distantFuture ] ] ;		//  v1.11p
+    char buf[1];
+    buf[0]= data;
+  //  [ self receivedString:radioDataBuffer length:radioDataCount typefd:radiofd ] ;
+    
+    [ self receivedString:buf length:1 typefd:radiofd ] ;
+
+ /*   if ( radioDataCount >= 64 ) // Make sure the buffer gets flushed
+        {
+        while ( radioDataCount >= 64 )
+        {
+            //  flush buffer
+        }
+    }
+    
 	[ radioDataLock lock ] ;
     if ( debugRadioPort ) {
 		// v1.11u -- send 32 bits per data byte
@@ -817,25 +834,26 @@ static int fifoLatency( int fd )
 		radioDataCount++ ;
 		debugRadioPortCount++ ;
 	}
-	else {
+    else {
 		radioDataBuffer[radioDataCount] = data ;
 		radioDataCount++ ;
 	}
-    [ self receivedString:radioDataBuffer length:radioDataCount typefd:radiofd ] ;
-    radioDataCount = 0 ;
+    [ radioDataLock unlock ] ;
+*/
 /*
-    if ( radioDataCount > 63 ) {
-    
+    if ( radioDataCount >= 64 ) {                  //  v1.11h (increased from 32)
+        //  flush buffer
+        [ self receivedString:radioDataBuffer length:radioDataCount typefd:radiofd ] ;
+        radioDataCount = 0 ;
     }
     else
     {
 		//  ask timer to fire N ms from now if nothing arrives earlier
 		[ radioDataLock unlock ] ; // v1.11o unlock before firing timer
-         NSLog(@"Setting timer to  %f...\n", radioAggregateTimeout);
+        NSLog(@"Setting timer to  %f...\n", radioAggregateTimeout);
 		[ radioDataTimer setFireDate:[ NSDate dateWithTimeIntervalSinceNow:radioAggregateTimeout ] ] ;		// v0.11t
 		return ;	//  v1.11o
 	}*/
-	[ radioDataLock unlock ] ;
 }
 
 //  write a string instead of a pair of bytes v1.11
