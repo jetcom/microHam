@@ -74,16 +74,6 @@ static int fifoLatency( int fd )
 		writeLock = [ lock retain ] ;
 		debug = NO ;
 		logToConsole = NO ;		//  v1.11
-		//  radio data buffering
-		radioDataLock = [ [ NSLock alloc ] init ] ;
-		radioDataCount = 0 ;
-		totalRadioCount = 0 ;
-		radioDataTimer = [ [ NSTimer scheduledTimerWithTimeInterval:800000.0 target:self selector:@selector(radioDataCheck:) userInfo:self repeats:YES ] retain ] ;
-		//  control buffering
-		controlLock = [ [ NSLock alloc ] init ] ;
-		controlCount = 0 ;
-		totalControlCount = 0 ;
-		controlTimer = [ [ NSTimer scheduledTimerWithTimeInterval:800001.0 target:self selector:@selector(controlCheck:) userInfo:self repeats:YES ] retain ] ;
 		
 		//  control packet filtering
 		previous78Value = -1 ;
@@ -118,7 +108,7 @@ static int fifoLatency( int fd )
 		
 		//  backdoor names are /tmp/microRouterWrite, /tmp/cwRouterWrite, /tmp/digiRouterWrite
 		
-		backdoorFIFO = [ [ NamedFIFOPair alloc ] initWithPipeName:[ baseName cString ] ] ;		
+		backdoorFIFO = [ [ NamedFIFOPair alloc ] initWithPipeName:[ baseName UTF8String  ] ] ;		
 		if ( backdoorFIFO ) {
 				if ( [ backdoorFIFO inputFileDescriptor ] > 0 && [ backdoorFIFO outputFileDescriptor ] > 0 ) {
 				[ self insertIntoSelectSet:backdoorFIFO type:ROUTERPORT router:0 writeOnly:NO ] ;
@@ -134,8 +124,6 @@ static int fifoLatency( int fd )
 {
 	if ( backdoorFIFO ) [ backdoorFIFO release ] ;
 	if ( writeLock ) [ writeLock release ] ;
-	if ( radioDataTimer ) [ radioDataTimer release ] ;
-	if ( controlTimer ) [ controlTimer release ] ;
 	[ super dealloc ] ;
 }
 
@@ -311,7 +299,7 @@ static int fifoLatency( int fd )
 	
 	fifoName = [ baseName stringByAppendingFormat:@"%d", portCount ] ;
 	portCount++ ;
-	return [ [ NamedFIFOPair alloc ] initWithPipeName:[ fifoName cString ] ] ;
+	return [ [ NamedFIFOPair alloc ] initWithPipeName:[ fifoName UTF8String  ] ] ;
 }
 
 //  Create a new FIFO with type ROUTERPORT to accept router requests (for getting ports and closing router connection).
@@ -667,7 +655,7 @@ static int fifoLatency( int fd )
 			if ( info->routerfd == routerfd ) break ;
 		}
 		if ( i >= FD_SETSIZE ) {
-			if ( logToConsole ) NSLog( @"*** cannot find file descriptor to remove FIFO?", routerfd ) ;
+			if ( logToConsole ) NSLog( @"*** cannot find file descriptor (%d) to remove FIFO?", routerfd ) ;
 			return ;
 		}
 	}
@@ -694,8 +682,7 @@ static int fifoLatency( int fd )
 	
 	//  v 1.11
 	if ( logToConsole ) {
-		NSString *str = [ NSString stringWithFormat: @"DATA  > %02X", data & 0xff ] ;
-		NSLog( str ) ;
+		NSLog( @"DATA  > %02X", data & 0xff ) ;
 	}
 	
 	buf = data ;
@@ -722,155 +709,61 @@ static int fifoLatency( int fd )
 	}
 }
 
-//  find all connected RADIO clients and send the radio strings to them
-//  write a string instead of a single byte v1.11
-- (void)receivedString:(char*)buf length:(int)length typefd:(int*)typefd
+- (void)receivedChar:(char)c typefd:(int*)typefd
 {
-	int i, status, fd ;
-	
-	//  1.11r  added sanity check to make sure the other end is draining the FIFO.
-	
-	// v1.11
-	if ( logToConsole ) {
-		char tbuf[80] ;
-		tbuf[0] = 0 ;
-		for ( i = 0; i < actualSetSize; i++ ) {
-			fd =  typefd[i] ;
-			if ( fd > 0 ) {				
-				time_t time ;
-				struct tm  *ts;
-				struct stat filestat ;
-				
-				fstat( fd, &filestat ) ;
-				time = filestat.st_atime ;
-				ts = localtime( &time ) ;
-				strftime( tbuf, sizeof( tbuf ) , "%H:%M:%S", ts ) ;
-				break ;
-			}
-		}
-		if ( tbuf[0] != 0 ) {
-			NSString *str = [ NSString stringWithString: @"RADIO > " ] ;
-			for ( i = 0; i < length; i++ ) {
-				str = [ str stringByAppendingFormat:@"%02X ", buf[i] & 0xff ] ;
-			}
-			totalRadioCount += length ;
-			str = [ str stringByAppendingFormat:@"(%ld %s)", totalRadioCount, tbuf ] ;
-			str = [ str stringByAppendingFormat:@" [%s]", [ [ self dateString ] UTF8String ] ] ;		//  v1.11j
-			NSLog( str ) ;
-		}
-	}
-	
-	if ( actualSetSize > 0 && length > 0 && length < 100 ) {
-		[ writeLock lock ] ;
-		for ( i = 0; i < actualSetSize; i++ ) {
-			fd = typefd[i] ;
-			if ( fd > 0 ) {
-				if ( fifoLatency( fd ) > LATENCYTIMEOUT ) {
-					//  one of the clients has stopped draining the FIFO?!
-					if ( logToConsole ) NSLog( @"*** shutting down RADIO FIFO because of client inactivity (> %d seconds) ***", LATENCYTIMEOUT ) ;
-					[ self removeFileDescriptor:fd typefd:&typefd[i] ] ;
-				}
-				else {
-					status = write( fd, buf, length ) ;
-					if ( status != length ) {
-						NSLog( @"Write Error for RADIO FIFO %d\n", fd ) ;
-						//  if write error occurred, for sanity check, close and invalidate the fd
-						[ self removeFileDescriptor:fd typefd:&typefd[i] ] ;
-					}
-				}
-			}
-		}
-		[ writeLock unlock ] ;
-	}
-}
+    int i = 0;
+    int fd = 0;
+    int status = 0;
+    if ( logToConsole)
+    {
+        NSLog( @"Radio > 0x%02x", c ) ;
+    }
+    [ writeLock lock ] ;
+    if (actualSetSize > 0)
+    {
+        for ( i = 0; i < actualSetSize; i++ ) {
+            fd = typefd[i] ;
+            if ( fd > 0 ) {
+                if ( fifoLatency( fd ) > LATENCYTIMEOUT ) {
+                    //  one of the clients has stopped draining the FIFO?!
+                    if ( logToConsole ) NSLog( @"*** shutting down RADIO FIFO because of client inactivity (> %d seconds) ***", LATENCYTIMEOUT ) ;
+                    [ self removeFileDescriptor:fd typefd:&typefd[i] ] ;
+                }
+                else {
+                    status = write( fd, &c, 1 ) ;
+                    if ( status != 1 ) {
+                        NSLog( @"Write Error for RADIO FIFO %d\n", fd ) ;
+                        //  if write error occurred, for sanity check, close and invalidate the fd
+                        [ self removeFileDescriptor:fd typefd:&typefd[i] ] ;
+                    }
+                }
+            }
+        }
+    }
+    [ writeLock unlock ] ;
 
-//  flush radio data if it has timed out, sleep for a long time, otherwise
-- (void)radioDataCheck:(NSTimer*)timer
-{
-	[ radioDataTimer setFireDate:[ NSDate distantFuture ] ] ;		//  v1.11p
-	[ radioDataLock lock ] ;
-	//  set timer back to idling period
-	if ( radioDataCount > 0 ) {
-		//  send buffer if we actually have data
-		[ self receivedString:radioDataBuffer length:radioDataCount typefd:radiofd ] ;
-		radioDataCount = 0 ;
-	}
-	[ radioDataLock unlock ] ;
+    
+
 }
 
 //  new RADIO byte received from Keyer
-//  accumulate as long a string as possible, flush data from here if it reaches the buffer limit, or send it from the radioDataTimer if the timeoutHas exceeded.
+
 - (void)receivedRadio:(int)data
 {
-	//  v1.11  accumulate as much data as possible
-	[ radioDataTimer setFireDate:[ NSDate distantFuture ] ] ;		//  v1.11p
-	[ radioDataLock lock ] ;
-    if ( debugRadioPort ) {
-		// v1.11u -- send 32 bits per data byte
-		radioDataBuffer[radioDataCount] = ( debugRadioPortCount/65536 ) & 0xff ;
-		radioDataCount++ ;
-		radioDataBuffer[radioDataCount] = ( debugRadioPortCount/256 ) & 0xff ;
-		radioDataCount++ ;
-		radioDataBuffer[radioDataCount] = debugRadioPortCount & 0xff ;
-		radioDataCount++ ;
-		radioDataBuffer[radioDataCount] = data ;
-		radioDataCount++ ;
-		debugRadioPortCount++ ;
-	}
-	else {
-		radioDataBuffer[radioDataCount] = data ;
-		radioDataCount++ ;
-	}
-    [ self receivedString:radioDataBuffer length:radioDataCount typefd:radiofd ] ;
-    radioDataCount = 0 ;
-/*
-    if ( radioDataCount > 63 ) {
-    
-    }
-    else
-    {
-		//  ask timer to fire N ms from now if nothing arrives earlier
-		[ radioDataLock unlock ] ; // v1.11o unlock before firing timer
-         NSLog(@"Setting timer to  %f...\n", radioAggregateTimeout);
-		[ radioDataTimer setFireDate:[ NSDate dateWithTimeIntervalSinceNow:radioAggregateTimeout ] ] ;		// v0.11t
-		return ;	//  v1.11o
-	}*/
-	[ radioDataLock unlock ] ;
+    [ self receivedChar:data typefd:radiofd ] ;
 }
 
-//  write a string instead of a pair of bytes v1.11
-- (void)sendControlString:(char*)buf length:(int)length typefd:(int*)typefd
-{
-	int i, status, fd ;
-		
-	// v1.11
-	if ( logToConsole ) {
-		char tbuf[80] ;
-		tbuf[0] = 0 ;
-		for ( i = 0; i < actualSetSize; i++ ) {
-			if ( typefd[i] > 0 ) {
-				time_t time ;
-				struct tm  *ts;
-				struct stat filestat ;
 
-				fstat( typefd[i], &filestat ) ;
-				time = filestat.st_atime ;
-				ts = localtime( &time ) ;
-				strftime( tbuf, sizeof( tbuf ) , "%H:%M:%S", ts ) ;
-				break ;
-			}
-		}
-		if ( tbuf[0] != 0 ) {
-			NSString *str = [ NSString stringWithString: @"CTRL  > " ] ;
-			for ( i = 0; i < length; i++ ) {
-				str = [ str stringByAppendingFormat:@"%02X ", buf[i] & 0xff ] ;
-			}
-			totalControlCount += length ;
-			str = [ str stringByAppendingFormat:@"(%ld %s)", totalControlCount, tbuf ] ;
-			str = [ str stringByAppendingFormat:@" [%s]", [ [ self dateString ] UTF8String ] ] ;		//  v1.11p
-			NSLog( str ) ;
-		}
-	}
+
+- (void)sendControlChar:(char)c typefd:(int*)typefd
+{
+    int i = 0;
+    int fd = 0;
+    int status = 0;
+    if ( logToConsole)
+    {
+        NSLog( @"CTRL > 0x%02x", c ) ;
+    }
 	if ( actualSetSize > 0 ) {
 		[ writeLock lock ] ;
 		for ( i = 0; i < actualSetSize; i++ ) {
@@ -882,8 +775,8 @@ static int fifoLatency( int fd )
 					[ self removeFileDescriptor:fd typefd:&typefd[i] ] ;
 				}
 				else {
-					status = write( fd, buf, length ) ;
-					if ( status != length ) {
+					status = write( fd, &c, 1 ) ;
+					if ( status != 1 ) {
 						// error has occurred, close and remove controlfd as sanity check
 						if ( logToConsole ) NSLog( @"FIFO write error, removing FIFO" ) ;
 						[ self removeFileDescriptor:fd typefd:&typefd[i] ] ;
@@ -893,46 +786,17 @@ static int fifoLatency( int fd )
 		}
 		[ writeLock unlock ] ;
 	}
+
 }
 
-//  flush control if it has timed out
-- (void)controlCheck:(NSTimer*)timer
-{
-	[ controlTimer setFireDate:[ NSDate distantFuture ] ] ;		//  v1.11p
-	[ controlLock lock ] ;
-	if ( controlCount > 0 ) {
-		//  send buffer if we actually have data
-		[ self sendControlString:controlBuffer length:controlCount typefd:controlfd ] ;
-		controlCount = 0 ;
-	}
-	//  go back to idling
-	[ controlLock unlock ] ;
-}
 
 //  new CONTROL data received from Keyer
 //  find all connected CONTROL clients and send the data to them
 //  NOTE: CONTROL is sent as two byte pairs.  The first byte is a "valid" byte (first and last valid bytes of a control string are 0 instead of 0x08)
 - (void)receivedControlInner:(int)data valid:(int)valid
 {
-	[ controlTimer setFireDate:[ NSDate distantFuture ] ] ;		//  v1.11p  moved to outside od controlLock
 	//  v1.11  accumulate as much data as possible
-	[ controlLock lock ] ;
-	if ( controlCount > 126 ) controlCount = 126 ;		// sanity check to make sure buffer does not overflow!
-	controlBuffer[controlCount++] = (valid) ? 1 : 0 ;
-	controlBuffer[controlCount++] = data ;
-	
-	if ( controlCount >= 127 ) {
-		//  flush buffer
-		[ self sendControlString:controlBuffer length:controlCount typefd:controlfd ] ;
-		controlCount = 0 ;
-	}
-	else {
-		//  ask timer to file 100ms from now if nothing arrives earlier
-		[ controlLock unlock ] ;				//  v1.11p
-		[ controlTimer setFireDate:[ NSDate dateWithTimeIntervalSinceNow:0.1 ] ] ;
-		return ;	// v1.11p
-	}
-	[ controlLock unlock ] ;
+    [ self sendControlChar:data  typefd:controlfd ] ;
 }
 
 - (void)receivedControl:(int)data valid:(int)valid

@@ -56,16 +56,8 @@
 		//  accumulate radio string v 1.11
 		NSLock *radioDataLock ;
 		int radioDataCount ;
-		char radioDataBuffer[128] ;
-		NSTimer *radioDataTimer ;
 		long totalRadioCount ;
 
-		//  accumulate control string v 1.11
-		NSLock *controlLock ;
-		int controlCount ;
-		char controlBuffer[180] ;
-		NSTimer *controlTimer ;
-		long totalControlCount ;
 		//  filter 78...f8 (voltage changes) packets
 		int previous78Value ;
 		int current78Index ;

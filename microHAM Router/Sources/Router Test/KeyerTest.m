@@ -287,7 +287,7 @@ static void setSelectInfo( int fd, fd_set *set, int fdtype, int *type, int *larg
 	unsigned char output[32], *s ;
 	int length ;
 	
-	string = [ [ winkeyMessage stringValue ] cString ] ;
+	string = [ [ winkeyMessage stringValue ] UTF8String  ] ;
 	length = strlen( string ) ;
 	
 	if ( length <= 0 ) return ;
@@ -317,7 +317,7 @@ static void setSelectInfo( int fd, fd_set *set, int fdtype, int *type, int *larg
 	const char *string ;
 	int length ;
 	
-	string = [ [ fskMessage stringValue ] cString ] ;
+	string = [ [ fskMessage stringValue ] UTF8String  ] ;
 	length = strlen( string ) ;
 	
 	if ( length <= 0 ) return ;

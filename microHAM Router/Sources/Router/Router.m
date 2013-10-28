@@ -261,7 +261,7 @@ static struct sockaddr_in *localSocket( in_port_t port )
 {
 	[ udpRadioTimer invalidate ] ;		//  v1.80
 	
-	Log( debug, "release resources for router %s\n", [ deviceName cString ]+10 ) ;
+	Log( debug, "release resources for router %s\n", [ deviceName UTF8String ]+10 ) ;
 	if ( server ) {
 		Log( debug, "releasing server\n" ) ;
 		[ server quitKeyer ] ;

@@ -405,7 +405,7 @@ static void powerManagerCallback( void *refcon, io_service_t service, natural_t 
 	//  return name to client or an empty string if -addNewClient failed
 	if ( name ) write( writefd, name, strlen(name)+1 ) ; 
 	else {
-		if ( logToConsole ) NSLog( @"Failed to add new client to %s", [ [ r deviceName ] cString ] ) ; 
+		if ( logToConsole ) NSLog( @"Failed to add new client to %s", [ [ r deviceName ] UTF8String  ] ) ;
 		write( writefd, "", 1 ) ;
 	}
 }
@@ -421,7 +421,7 @@ static void powerManagerCallback( void *refcon, io_service_t service, natural_t 
 		write( writefd, "", 1 ) ;
 		return ;
 	}
-	s = [ [ r keyerID ] cString ] ;
+	s = [ [ r keyerID ] UTF8String  ] ;
 	write( writefd, s, strlen(s)+1 ) ;
 }
 

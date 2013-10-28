@@ -114,7 +114,7 @@
 	
 	if ( path ) {
 		//  Unix path exist for device, try opening it as a serial port
-		fd = open( [ path cString ], O_RDWR ) ; // | O_NOCTTY ) ; // | O_NDELAY ) ;
+		fd = open( [ path UTF8String  ], O_RDWR ) ; // | O_NOCTTY ) ; // | O_NDELAY ) ;
 		if ( fd < 0 ) errorCode = errno ;
 		if ( fd >= 0 ) {
 			if ( fcntl( fd, F_SETFL, 0 ) >= 0 ) {
@@ -140,12 +140,12 @@
 			}
 			close( fd ) ;
 			fd = -1 ;
-			sprintf( msg, "Problem with port named \"%s\".", [ stream cString ] ) ;
+			sprintf( msg, "Problem with port named \"%s\".", [ stream UTF8String  ] ) ;
 			[ self alertMessage:@"Cannot execute fcntl." informativeText:[ NSString stringWithCString:msg ] ] ;
 			return NO ;
 		}
 		//  could not open or set
-		sprintf( msg, "Problem with port named \"%s\".", [ stream cString ] ) ;
+		sprintf( msg, "Problem with port named \"%s\".", [ stream UTF8String  ] ) ;
 		[ self alertMessage:@"Cannot open port." informativeText:[ NSString stringWithCString:msg ] ] ;
 	}
 	return NO ;
